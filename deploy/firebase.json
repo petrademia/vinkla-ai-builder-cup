@@ -1,0 +1,8 @@
+{
+  "hosting": {
+    "public": "web",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [{ "source": "/v1/**", "run": { "serviceId": "vinkla-api", "region": "asia-southeast1" } }]
+  },
+  "firestore": { "rules": "firestore.rules" }
+}
