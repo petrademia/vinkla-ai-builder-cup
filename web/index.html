@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delay workbench mockup</title>
+<style>
+:root{--bg:#f4f5f7;--card:#fff;--soft:#f1f3f4;--ink:#202124;--mute:#5f6368;--line:#dadce0;
+--blue:#1a73e8;--blue-t:#e8f0fe;--red:#d93025;--red-t:#fce8e6;--amber:#b06000;--amber-t:#fef3e0;--green:#188038;--green-t:#e6f4ea;--violet:#7b3fe4;--violet-t:#f1eafd}
+@media (prefers-color-scheme:dark){:root{--bg:#131416;--card:#1e1f22;--soft:#2a2b2f;--ink:#e8eaed;--mute:#9aa0a6;--line:#3c4043;
+--blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#c4a5fb;--violet-t:#2c2245}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+.wrap{max-width:1180px;margin:0 auto;padding:20px 16px 90px}
+header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{width:34px;height:34px;border-radius:10px;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;font-weight:700}
+h1{font-size:18px;margin:0;font-weight:600}
+.sub{font-size:12px;color:var(--mute)}
+.pill{margin-left:auto;font-size:12px;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--card)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.mb{margin-bottom:16px}
+.g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.fn{border-radius:16px;padding:14px 16px;border:1px solid var(--line);background:var(--card)}
+.fn .lb{font-size:12px;color:var(--mute)}
+.fn .nv{font-size:28px;font-weight:700;line-height:1.25}
+.fn .nv small{font-size:13px;font-weight:500;color:var(--mute);margin-left:4px}
+.fn .bar{height:6px;border-radius:3px;background:var(--soft);margin-top:8px}
+.fn .bar i{display:block;height:6px;border-radius:3px;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
+.fn .ft{font-size:12px;color:var(--mute);margin-top:4px}
+.sec{font-size:12px;color:var(--mute);margin:18px 0 8px;display:flex;justify-content:space-between}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.pl{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;font:inherit;color:inherit;text-align:left;transition:transform .12s,border-color .12s}
+.pl:hover{transform:translateY(-2px);border-color:var(--blue)}
+.pl.on{border:2px solid var(--blue);background:var(--blue-t);padding:11px 13px}
+.ring{width:44px;height:44px;flex:none}
+.pl b{display:block;font-size:14px}
+.pl span{font-size:12px;color:var(--mute)}
+.cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
+.card h2{font-size:13px;font-weight:600;margin:0 0 10px;display:flex;align-items:center;gap:8px}
+.ai{border:1px solid var(--violet);background:linear-gradient(135deg,var(--violet-t),var(--card) 60%)}
+.ai h2{color:var(--violet)}
+.spark{width:18px;height:18px;flex:none}
+.regen{margin-left:auto;font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:3px 10px;cursor:pointer}
+.regen:hover{background:var(--soft)}
+.head{font-size:17px;font-weight:600;line-height:1.4;margin:0 0 10px}
+.pts{margin:0;padding:0;list-style:none}
+.pts li{display:flex;gap:10px;font-size:13px;line-height:1.55;color:var(--mute);margin-bottom:8px;opacity:0;transform:translateY(4px);animation:in .4s forwards}
+.pts li i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--violet);margin-top:8px}
+@keyframes in{to{opacity:1;transform:none}}
+.chk{font-size:11px;color:var(--mute);margin-top:6px}
+.grp{padding:10px 0;border-top:1px solid var(--line);cursor:pointer}
+.grp:first-of-type{border-top:0}
+.grp:hover .gname{color:var(--blue)}
+.gtop{display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px}
+.gname{font-weight:500}
+.stack{height:10px;border-radius:5px;background:var(--soft);display:flex;overflow:hidden}
+.stack i{display:block;height:10px;transition:width .8s cubic-bezier(.2,.8,.2,1)}
+.legend{font-size:11px;color:var(--mute);display:flex;gap:12px;margin-top:8px}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.act{display:flex;align-items:center;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:13px}
+.act:first-of-type{border-top:0}
+.act .t{flex:1;min-width:0}.act .t b{display:block}.act .t span{font-size:12px;color:var(--mute)}
+.act .r{flex:1;color:var(--mute);font-size:12px}
+.btn{font:inherit;font-size:13px;padding:6px 12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:8px;cursor:pointer}
+.btn:hover{background:var(--soft)}
+.btn.p{background:var(--ink);color:var(--card);border-color:var(--ink)}
+.card textarea{width:100%;font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);resize:vertical}
+.tagv{margin-left:auto;font-size:11px;font-weight:600;color:var(--violet)}
+.btn.v{background:var(--violet);color:#fff;border-color:var(--violet)}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip.high,.chip.Major{background:var(--red-t);color:var(--red)}
+.chip.medium,.chip.Moderate{background:var(--amber-t);color:var(--amber)}
+.chip.low,.chip.Minor{background:var(--blue-t);color:var(--blue)}
+.chip.ok,.chip.appr{background:var(--green-t);color:var(--green)}
+.chip.tol{background:var(--soft);color:var(--mute)}
+.chip.Critical{background:var(--red);color:#fff}
+.live{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);animation:pulse 1.4s infinite}
+.live.off{background:var(--mute);animation:none}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(24,128,56,.5)}100%{box-shadow:0 0 0 8px rgba(24,128,56,0)}}
+.feed{font-size:12px;color:var(--mute)}
+.feed div{padding:6px 0;border-top:1px solid var(--line);display:flex;gap:8px}
+.feed div:first-child{border-top:0}
+.feed b{color:var(--ink);font-weight:600}
+.feed time{flex:none;font:11px ui-monospace,Menlo,monospace}
+.esc{padding:8px 0;border-top:1px solid var(--line);cursor:pointer;display:flex;align-items:center;gap:10px;font-size:13px}
+.esc:first-of-type{border-top:0}
+.esc:hover b{color:var(--blue)}
+.esc .arrow{margin-left:auto;font-weight:600;font-size:12px;color:var(--red);white-space:nowrap}
+.sv{display:grid;grid-template-columns:78px minmax(0,1fr) 40px;gap:8px;align-items:center;font-size:12px;margin-bottom:6px}
+.sv .b{height:10px;border-radius:5px;background:var(--soft);overflow:hidden}
+.sv .b i{display:block;height:10px;transition:width .8s}
+.set{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;font-size:13px;margin-bottom:8px}
+.set input[type=number]{width:54px;font:inherit;font-size:13px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.set input[type=range]{width:140px}
+.tools{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;align-items:center}
+.tools input,.tools select{font:inherit;font-size:13px;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink)}
+.tools input{flex:1;min-width:160px}
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{font-size:12px;font-weight:600;color:var(--mute);text-align:left;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap;cursor:pointer;user-select:none}
+.tbl th:hover{color:var(--ink)}
+.tbl td{padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.tbl tr.r{cursor:pointer}.tbl tr.r:hover td{background:var(--soft)}
+.tbl tr.open td{background:var(--soft)}
+.car{display:inline-block;transition:transform .15s;color:var(--mute)}
+tr.open .car{transform:rotate(90deg)}
+.scroll{overflow-x:auto}
+.det td{white-space:normal;padding:0;background:var(--soft)}
+.dg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:14px 14px 0}
+.dg2{padding:12px 14px 14px}
+.b{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.b h3{font-size:12px;margin:0 0 8px;color:var(--mute);font-weight:600}
+.notice{font-size:12px;font-style:italic;color:var(--mute);border-left:3px solid var(--violet);padding-left:8px;margin-bottom:8px}
+.json{font:11px/1.5 ui-monospace,Menlo,monospace;background:var(--violet-t);color:var(--violet);border-radius:8px;padding:6px 8px}
+.ev{font-size:12px;padding:3px 0;color:var(--mute);display:flex;justify-content:space-between;gap:8px}.ev b{color:var(--ink);font-weight:600}
+.ot{width:100%;border-collapse:collapse;font-size:12px}
+.ot th{text-align:left;color:var(--mute);font-weight:600;padding:4px 6px;border-bottom:1px solid var(--line);cursor:default;white-space:nowrap}
+.ot td{padding:6px;border-bottom:1px solid var(--line);white-space:nowrap}
+.ot tr.rec td{background:var(--green-t)}
+.rk{display:inline-flex;width:20px;height:20px;border-radius:50%;background:var(--soft);align-items:center;justify-content:center;font-weight:700;font-size:11px}
+.ot tr.rec .rk{background:var(--green);color:#fff}
+.why{font-size:13px;line-height:1.55;margin:0 0 10px;padding:10px 12px;background:var(--violet-t);border-radius:10px;color:var(--ink)}
+.why b{color:var(--violet)}
+.dr{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:8px 0;font-size:12px}
+.okbox{padding:10px 12px;border-radius:10px;background:var(--green-t);color:var(--green);font-size:13px}
+.pg{display:flex;align-items:center;justify-content:space-between;margin-top:12px;font-size:12px;color:var(--mute)}
+.pg div{display:flex;gap:6px}
+details>summary{list-style:none;cursor:pointer}
+details>summary::-webkit-details-marker{display:none}
+.sumrow{display:flex;align-items:center;gap:10px}
+details[open] .sumrow .car{transform:rotate(90deg)}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 16px;border-radius:10px;font-size:13px;z-index:40;display:none}
+.fab{position:fixed;right:20px;bottom:20px;z-index:20;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 18px;background:var(--violet);color:#fff;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25)}
+.fab svg{width:18px;height:18px}
+.chat{position:fixed;right:20px;bottom:20px;z-index:21;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100vh - 40px));display:none;flex-direction:column;background:var(--card);border:1px solid var(--violet);border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
+.chat.on{display:flex}
+.ch{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--violet-t);color:var(--violet);font-weight:600}
+.ch .x{margin-left:auto;border:0;background:transparent;color:inherit;font-size:20px;cursor:pointer;line-height:1}
+.cm{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:10px}
+.msg{max-width:88%;padding:9px 12px;border-radius:14px;font-size:13px;line-height:1.55}
+.msg.u{align-self:flex-end;background:var(--ink);color:var(--card);border-bottom-right-radius:4px}
+.msg.g{align-self:flex-start;background:var(--soft);border-bottom-left-radius:4px}
+.tl{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px}
+.tl span{font:10.5px ui-monospace,Menlo,monospace;background:var(--violet-t);color:var(--violet);border-radius:6px;padding:2px 6px}
+.msg ol{margin:6px 0;padding-left:18px}
+.quote{white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 10px;margin:6px 0;font-size:12px}
+.dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--mute);margin-right:3px;animation:bl 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,60%,100%{opacity:.25}30%{opacity:1}}
+.sg{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
+.sg button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer}
+.sg button:hover{background:var(--soft)}
+.cf{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
+.cf input{flex:1;font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
+.cn{font-size:11px;color:var(--mute);padding:0 14px 8px}
+.g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kc{border-radius:16px;padding:16px 18px;border:1px solid var(--line);background:var(--card)}
+.kc.red{background:var(--red-t);border-color:transparent}
+.kc.amber{background:var(--amber-t);border-color:transparent}
+.kc.blue{background:var(--blue-t);border-color:transparent}
+.kc .lb{font-size:12px;font-weight:600;color:var(--mute)}
+.kc .nv{font-size:30px;font-weight:700;line-height:1.15;margin:4px 0}
+.kc .nv.big{font-size:44px;line-height:1.05}
+.kc.red .nv.big{color:var(--red)}.kc.amber .nv.big{color:var(--amber)}.kc.blue .nv.big{color:var(--blue)}
+.kc .ks{font-size:13px}
+.kc .ft{font-size:12px;color:var(--mute);margin-top:6px}
+.sevbar{display:flex;height:8px;border-radius:4px;overflow:hidden;margin-top:10px;background:var(--soft)}
+.sevbar i{display:block;height:8px}
+.tr{font-size:12px;font-weight:600}
+.tr.good{color:var(--green)}.tr.bad{color:var(--red)}
+.big2{display:flex;height:16px;border-radius:8px;overflow:hidden;background:var(--soft);margin:4px 0 12px}
+.big2 i{display:block;height:16px;transition:width .8s}
+.kt{width:100%;border-collapse:collapse;font-size:13px}
+.kt th{text-align:right;font-size:12px;color:var(--mute);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--line);cursor:default}
+.kt th:first-child,.kt td:first-child{text-align:left}
+.kt td{text-align:right;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
+.kt tr:last-child td{border-bottom:0;font-weight:600}
+@media (prefers-color-scheme:dark){.btn.v,.fab{color:#1e1f22}}
+@media (max-width:900px){.g4,.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g2{grid-template-columns:1fr}.cols{grid-template-columns:1fr}.dg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><div class="logo">V</div><div><h1>Delay workbench</h1><div class="sub">Inbound purchase orders, 1 Jun 2026</div></div><span class="pill">Synthetic data</span><button class="btn" id="reset">Reset demo data</button></header>
+
+<div class="sec"><span>View by planner queue</span><span>Click a queue to filter every number and table below</span></div>
+<div class="tabs" id="tabs"></div>
+
+<div class="sec"><span>1. Needs attention now</span><span></span></div>
+<div class="g3" id="k1"></div>
+<div class="sec"><span>2. Open PO exposure</span><span></span></div>
+<div class="g3" id="k2"></div>
+<div class="sec"><span>3. Open POs: on time vs delayed</span><span></span></div>
+<div class="card" id="k3"></div>
+<div class="sec"><span>4. Year to date, Jan to May 2026</span><span></span></div>
+<div class="g2" id="k4"></div>
+
+<div class="cols" style="margin-top:16px">
+<div>
+<div class="card ai mb">
+<h2><svg class="spark" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c.5 5.5 4.5 9.5 10 10-5.5.5-9.5 4.5-10 10-.5-5.5-4.5-9.5-10-10 5.5-.5 9.5-4.5 10-10z"/></svg>Gemini briefing<button class="regen" id="regen">Regenerate</button></h2>
+<p class="head" id="head"></p>
+<ul class="pts" id="pts"></ul>
+<div class="chk">Counts come from the rules engine and are checked before this text is shown.</div>
+</div>
+<div class="card mb" id="intake"><h2>Notice intake<span class="tagv">Live Gemini</span></h2>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" data-sample="0">English sample</button><button class="btn" data-sample="1">Bahasa sample</button><button class="btn" data-sample="2">Japanese sample</button></div>
+<textarea id="nt" rows="4" placeholder="Paste a supplier or carrier delay notice, in any language"></textarea>
+<div style="margin-top:8px"><button class="btn v" id="nx">Extract with Gemini</button></div><div id="nr"></div></div>
+<div class="card mb"><h2>Needs action today</h2><div id="acts"></div></div>
+<div class="card mb"><h2><span class="live" id="livedot"></span>Live ETA feed<button class="regen" id="livebtn">Pause</button></h2><div class="feed" id="feed"></div><div class="chk">Simulated carrier events. Each one updates the expected date and the date history.</div></div>
+<div class="card mb"><h2>ERP write-back log</h2><div class="feed" id="log"><div>No approvals yet. Approve an option in the table below.</div></div></div>
+</div>
+<div>
+<div class="card mb"><h2>Delay groups</h2><div id="groups"></div>
+<div class="legend"><span><i class="dot" style="background:var(--red)"></i>At stockout risk</span><span><i class="dot" style="background:var(--blue)"></i>Delayed, covered</span></div></div>
+<div class="card mb"><h2>Escalating delays</h2><div id="esc"></div><div class="chk">POs whose delay grew across several date changes.</div></div>
+<div class="card mb"><h2>Delay severity</h2><div id="sevbars"></div></div>
+<div class="card mb"><h2>Detection rules</h2>
+<div class="set"><span>Tolerance vs contract date: <b id="tolv">0</b> d</span><input type="range" id="tol" min="0" max="5" value="0"></div>
+<div class="set"><span>Minor up to (days)</span><input type="number" id="s0" value="3" min="1"></div>
+<div class="set"><span>Moderate up to (days)</span><input type="number" id="s1" value="7" min="1"></div>
+<div class="set"><span>Major up to, above is critical (days)</span><input type="number" id="s2" value="14" min="1"></div>
+<div class="chk">Delays inside the tolerance are not flagged and count as on time.</div></div>
+</div>
+</div>
+
+<div class="card" id="tcard">
+<details open id="det">
+<summary><div class="sumrow"><span class="car">&#9656;</span><h2 style="margin:0">All purchase orders</h2><span class="sub" id="tcount"></span></div></summary>
+<div style="height:12px"></div>
+<div class="tools">
+<input id="q" type="search" placeholder="Search PO, item, supplier">
+<select id="fs"><option value="delayed">Delayed only</option><option value="all">All 5,000 POs</option></select>
+<select id="fr"><option value="all">Any risk</option><option value="high">Act today</option><option value="atrisk">Stockout risk (all)</option><option value="medium">Stockout risk, not urgent</option><option value="low">Delayed, covered</option><option value="ok">On time</option></select>
+<select id="fg"></select>
+<button class="btn" id="expall">Expand page</button>
+</div>
+<div class="scroll"><table class="tbl"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+<div class="pg"><span id="pginfo"></span><div><button class="btn" id="prev">Previous</button><button class="btn" id="next">Next</button></div></div>
+</details>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+<button class="fab" id="fab"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c.5 5.5 4.5 9.5 10 10-5.5.5-9.5 4.5-10 10-.5-5.5-4.5-9.5-10-10 5.5-.5 9.5-4.5 10-10z"/></svg>Ask Gemini</button>
+<div class="chat" id="chat" role="dialog" aria-label="Ask Gemini">
+<div class="ch"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2c.5 5.5 4.5 9.5 10 10-5.5.5-9.5 4.5-10 10-.5-5.5-4.5-9.5-10-10 5.5-.5 9.5-4.5 10-10z"/></svg>Planner copilot<button class="x" id="cx" aria-label="Close">&times;</button></div>
+<div class="cm" id="cm"></div>
+<div class="sg" id="sg"></div>
+<div class="cn">Gemini answers from live data through tools. It cannot approve or send anything.</div>
+<form class="cf" id="cf"><input id="ci" placeholder="Ask about delays, causes, suppliers" autocomplete="off"><button class="btn p" type="submit">Send</button></form>
+</div>
+
+<script>
+function mulberry(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+var rnd=mulberry(11);
+function ri(a,b){return a+Math.floor(rnd()*(b-a+1))}
+var BASE=new Date(2026,5,1);
+function fd(n){var d=new Date(BASE);d.setDate(d.getDate()+n);return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})}
+function num(n){return n.toLocaleString('en-US')}
+function dy(n){return n+(n===1?' day':' days')}
+function el(id){return document.getElementById(id)}
+function clock(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
+
+var PL={a:{name:'Rina',role:'Electronics components'},b:{name:'Taro',role:'Raw materials'},c:{name:'Mai',role:'Packaging'}};
+var ROWS=[],BYID={},APPR={},LOG=[],TOL=0,SEV=[3,7,14],IDSET=null,CHAT=[];
+var SID=(function(){try{var k=localStorage.getItem('vinkla_sid');if(!k){k=Array.from(crypto.getRandomValues(new Uint8Array(12)),function(b){return b.toString(16).padStart(2,'0')}).join('');localStorage.setItem('vinkla_sid',k)}return k}catch(e){return 'anon'+Math.random().toString(36).slice(2,12)}})();
+var cur='all',sk='risk',sd=1,page=0,PS=15,open={};
+function sev(d){return d<=SEV[0]?'Minor':d<=SEV[1]?'Moderate':d<=SEV[2]?'Major':'Critical'}
+function isDel(r){return r.delay>TOL}
+function eff(r){if(APPR[r.id])return 'appr';if(r.risk==='low'&&r.delay<=TOL)return 'tol';if(r.risk==='ok')return 'ok';return r.risk}
+function sel(){return ROWS.filter(function(r){return cur==='all'||r.pl===cur})}
+function delayed(){return sel().filter(isDel)}
+
+function groupsOf(k){
+ var m={},key;
+ ROWS.filter(function(r){return (k==='all'||r.pl===k)&&isDel(r)}).forEach(function(r){
+  key=k==='all'?r.g.split(',')[0]:r.g;
+  if(!m[key])m[key]={l:key,n:0,r:0};m[key].n++;if(r.risk==='high'||r.risk==='medium')m[key].r++;});
+ return Object.keys(m).map(function(x){return m[x]}).sort(function(a,b){return b.n-a.n});
+}
+function stats(k){var o={n:0,r:0,h:0};ROWS.forEach(function(r){if((k==='all'||r.pl===k)&&isDel(r)){o.n++;if(r.risk==='high'||r.risk==='medium')o.r++;if(r.risk==='high')o.h++}});return o}
+function ringSvg(n,r,col){var c=2*Math.PI*17,f=c*(n?r/n:0);return '<svg class="ring" viewBox="0 0 44 44"><circle cx="22" cy="22" r="17" fill="none" stroke="var(--soft)" stroke-width="6"/><circle cx="22" cy="22" r="17" fill="none" stroke="'+col+'" stroke-width="6" stroke-linecap="round" stroke-dasharray="'+f+' '+c+'" transform="rotate(-90 22 22)"/></svg>'}
+
+var YTD={a:{otd:[87.1,88.4,86.9,89.0,88.2],lt:[29.4,29.0,30.1,28.6,28.9]},b:{otd:[90.8,91.5,92.0,90.4,91.2],lt:[32.0,31.5,31.2,31.8,30.9]},c:{otd:[89.5,90.2,88.9,91.0,90.6],lt:[24.8,25.1,24.2,24.6,24.0]}};
+var MON=['Jan','Feb','Mar','Apr','May'];
+function ytdSeries(key){var ks=cur==='all'?Object.keys(YTD):[cur];return MON.map(function(m,i){return ks.reduce(function(a,k){return a+YTD[k][key][i]},0)/ks.length})}
+function usd(n){return n>=1e6?'$'+(n/1e6).toFixed(2)+'M':n>=1e3?'$'+Math.round(n/1e3)+'k':'$'+Math.round(n)}
+function qf(n){return n>=1e6?(n/1e6).toFixed(2)+'M':n>=1e3?Math.round(n/1e3)+'k':String(Math.round(n))}
+var FM={int:function(x){return num(Math.round(x))},usd:usd,qty:function(x){return qf(x)+' units'},pct:function(x){return x.toFixed(1)+'%'},d:function(x){return x.toFixed(1)+' d'}};
+function countUp(root,anim){root.querySelectorAll('.nv').forEach(function(e){var v=+e.getAttribute('data-v'),f=FM[e.getAttribute('data-f')],t0=null;
+ if(!anim){e.textContent=f(v);return}
+ function st(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/700);e.textContent=f(v*p);if(p<1)requestAnimationFrame(st)}requestAnimationFrame(st)})}
+function growBars(root){setTimeout(function(){root.querySelectorAll('[data-w]').forEach(function(e){e.style.width=e.getAttribute('data-w')+'%'})},40)}
+function agg(rows){var o={n:0,q:0,v:0};rows.forEach(function(r){o.n++;o.q+=r.qty;o.v+=r.qty*r.unit});return o}
+function kc(cls,lab,v,f,sub,foot,extra){return '<div class="kc '+cls+'"><div class="lb">'+lab+'</div><div class="nv'+(cls?' big':'')+'" data-v="'+v+'" data-f="'+f+'">0</div><div class="ks">'+sub+'</div>'+(extra||'')+'<div class="ft">'+foot+'</div></div>'}
+function spark(a,col){var W=200,H=46,mn=Math.min.apply(null,a),mx=Math.max.apply(null,a),sp=(mx-mn)||1,pts=a.map(function(v,i){return[8+i*((W-16)/(a.length-1)),H-8-((v-mn)/sp)*(H-18)]});
+ return '<svg viewBox="0 0 '+W+' '+(H+14)+'" width="100%" role="img" aria-label="Monthly trend"><path d="M'+pts.map(function(p){return p[0]+' '+p[1]}).join(' L')+'" fill="none" stroke="'+col+'" stroke-width="2"/>'+pts.map(function(p,i){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(i===a.length-1?4:2.5)+'" fill="'+col+'"/><text x="'+p[0]+'" y="'+(H+10)+'" font-size="9" text-anchor="middle" fill="var(--mute)">'+MON[i]+'</text>'}).join('')+'</svg>'}
+function ytdCard(lab,key,f,goodUp,unit){
+ var a=ytdSeries(key),v=a.reduce(function(x,y){return x+y},0)/a.length,dl=a[4]-a[3],good=goodUp?dl>=0:dl<=0;
+ return '<div class="kc"><div class="lb">'+lab+'</div><div class="nv" data-v="'+v+'" data-f="'+f+'">0</div><div class="ks"><span class="tr '+(good?'good':'bad')+'">'+(dl>=0?'+':'')+dl.toFixed(1)+unit+' vs April</span> <span class="sub">May: '+a[4].toFixed(1)+unit+'</span></div>'+spark(a,good?'var(--green)':'var(--red)')+'</div>'}
+function drawKpis(anim){
+ var d=sel(),del=d.filter(isDel),ont=d.filter(function(r){return !isDel(r)}),T=agg(d),D=agg(del),O=agg(ont),
+  R=agg(del.filter(function(r){return r.risk==='high'||r.risk==='medium'})),H=agg(del.filter(function(r){return r.risk==='high'})),
+  c={Minor:0,Moderate:0,Major:0,Critical:0},pc=T.n?D.n/T.n*100:0;
+ del.forEach(function(r){c[sev(r.delay)]++});
+ var cl={Minor:'var(--blue)',Moderate:'var(--amber)',Major:'var(--red)',Critical:'#7a1410'};
+ var sevbar='<div class="sevbar">'+Object.keys(c).map(function(n){return '<i style="width:'+(D.n?c[n]/D.n*100:0)+'%;background:'+cl[n]+'"></i>'}).join('')+'</div>';
+ var sevlg='Minor '+c.Minor+' · Moderate '+c.Moderate+' · Major '+c.Major+' · Critical '+c.Critical;
+ el('k1').innerHTML=
+  kc('red','Act today',H.n,'int',usd(H.v)+' at stake · '+qf(H.q)+' units','Stock ends within 3 days. These need a decision now.')+
+  kc('amber','Stockout risk',R.n,'int',usd(R.v)+' at stake · '+qf(R.q)+' units','Delayed POs whose stock ends before the new arrival. Includes the '+H.n+' above.')+
+  kc('blue','Risk of delayed open POs',D.n,'int',pc.toFixed(1)+'% of open POs · '+usd(D.v)+' · '+qf(D.q)+' units',sevlg,sevbar);
+ el('k2').innerHTML=
+  kc('','Open POs',T.n,'int','On time '+num(O.n)+' · delayed '+num(D.n),'Purchase orders not yet received.')+
+  kc('','Open quantity',T.q,'qty','Average '+num(T.n?Math.round(T.q/T.n):0)+' units per PO','Units ordered and not yet received.')+
+  kc('','Open value',T.v,'usd','Average '+usd(T.n?T.v/T.n:0)+' per PO','Values in USD, based on illustrative unit prices.');
+ var po=T.v?O.v/T.v*100:0,pd=100-po;
+ el('k3').innerHTML='<div class="big2"><i style="width:'+po+'%;background:var(--green)"></i><i style="width:'+pd+'%;background:var(--red)"></i></div><table class="kt"><thead><tr><th>Open POs</th><th>POs</th><th>Quantity</th><th>Value</th><th>Share of value</th></tr></thead><tbody>'+
+  '<tr><td><span class="chip ok">On time</span></td><td>'+num(O.n)+'</td><td>'+num(O.q)+' units</td><td>'+usd(O.v)+'</td><td>'+po.toFixed(1)+'%</td></tr>'+
+  '<tr><td><span class="chip high">Delayed</span></td><td>'+num(D.n)+'</td><td>'+num(D.q)+' units</td><td>'+usd(D.v)+'</td><td>'+pd.toFixed(1)+'%</td></tr>'+
+  '<tr><td>Total open</td><td>'+num(T.n)+'</td><td>'+num(T.q)+' units</td><td>'+usd(T.v)+'</td><td>100%</td></tr></tbody></table>';
+ el('k4').innerHTML=ytdCard('YTD on-time delivery','otd','pct',true,' pts')+ytdCard('YTD logistics lead time','lt','d',false,' d');
+ countUp(el('k1'),anim);countUp(el('k2'),anim);countUp(el('k4'),anim);
+}
+function drawTabs(){
+ var h='',all=stats('all');
+ h+='<button class="pl'+(cur==='all'?' on':'')+'" data-k="all">'+ringSvg(all.n,all.r,'var(--red)')+'<div><b>All planners</b><span>'+all.n+' delays, '+all.r+' at risk</span></div></button>';
+ Object.keys(PL).forEach(function(k){var s=stats(k);h+='<button class="pl'+(cur===k?' on':'')+'" data-k="'+k+'">'+ringSvg(s.n,s.r,'var(--red)')+'<div><b>'+PL[k].name+'</b><span>'+PL[k].role+'</span><span style="display:block">'+s.n+' delays, '+s.r+' at risk</span></div></button>'});
+ el('tabs').innerHTML=h;
+ document.querySelectorAll('.pl').forEach(function(e){e.onclick=function(){cur=e.getAttribute('data-k');page=0;drawAll()}});
+}
+function brief(){
+ var s=stats(cur),g=groupsOf(cur),big=g[0];
+ if(!big){el('head').textContent='No delays in this view.';el('pts').innerHTML='';window._brief={head:'No delays in this view.',pts:[]};return}
+ var top2=g.slice().sort(function(a,b){return b.r-a.r}).filter(function(x){return x!==big})[0]||big,calm=g.filter(function(x){return x.r<=1}),calmN=calm.reduce(function(a,x){return a+x.n},0);
+ var who=cur==='all'?'across 3 planners':'in your queue';
+ var head=num(s.n)+' delays '+who+'. '+s.r+' could stop a line, and '+s.h+' need a decision today.';
+ var pts=[big.l+' is the biggest group: '+big.n+' POs, '+big.r+' at stockout risk.',top2.l+' carries '+top2.r+' at-risk POs out of '+top2.n+'. Check these first.',calmN+' POs in '+(calm.length?calm.map(function(x){return x.l}).join(' and '):'low-risk groups')+' carry little or no risk and can be cleared in one batch.'];
+ window._brief={head:head,pts:pts};
+ el('head').textContent=head;
+ el('pts').innerHTML=pts.map(function(t,i){return '<li style="animation-delay:'+(i*0.25+0.1)+'s"><i></i><span>'+t+'</span></li>'}).join('');
+}
+
+var OT={micro:1.0,sto:1.6,cod:0.8,air:12};
+var API=new URLSearchParams(location.search).get('api')||'https://vinkla-api-334409609237.asia-southeast1.run.app';
+function getJson(path){return fetch(API+path).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(typeof j.error==='string'?j.error:'HTTP '+res.status);return j})})}
+function post(path,body){return fetch(API+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(typeof j.error==='string'?j.error:'HTTP '+res.status);return j})})}
+var KIND={micro:'micro_po',sto:'sto',cod:'cod',air:'air'},BACK={micro_po:'micro',sto:'sto',cod:'cod',air:'air'};
+function cands(r){return[{kind:'micro_po',label:'Micro-PO to '+r.sup,leadDays:2+r.id%3,unitCost:r.unit*1.15,fixedCost:0,kgCo2ePerUnit:0.02*OT.micro},{kind:'sto',label:'Stock transfer (STO), Plant '+(1+r.id%3),leadDays:3+r.id%3,unitCost:r.unit*1.05,fixedCost:150,kgCo2ePerUnit:0.02*OT.sto},{kind:'cod',label:'Change of destination (COD)',leadDays:2+r.id%2,unitCost:r.unit*0.95,fixedCost:80,kgCo2ePerUnit:0.02*OT.cod},{kind:'air',label:'Air freight',leadDays:2,unitCost:r.unit*2.8,fixedCost:400,kgCo2ePerUnit:0.02*OT.air}]}
+function assessApi(r){return post('/v1/assess',{onHand:r.cover*r.demand,dailyDemand:r.demand,inbound:[],arrivalDay:r.edd+1,candidates:cands(r)}).then(function(res){r._api={shortage:res.assessment,opts:res.options.map(function(x){return{t:BACK[x.kind],n:x.label,d:x.leadDays,c:x.totalCost,e:Math.round(x.co2eKg),fit:x.beforeStockout,rank:x.rank}})};return r._api})}
+function best(r){return(r._api?r._api.opts:opts(r))[0]}
+function opts(r){
+ if(!r.gap)return[];
+ var u=r.gap*r.demand;
+ var o=[{t:'micro',n:'Micro-PO to '+r.sup,d:2+r.id%3,c:u*r.unit*1.15},{t:'sto',n:'Stock transfer (STO), Plant '+(1+r.id%3),d:3+r.id%3,c:u*r.unit*1.05+150},{t:'cod',n:'Change of destination (COD)',d:2+r.id%2,c:u*r.unit*0.95+80},{t:'air',n:'Air freight',d:2,c:u*r.unit*2.8+400}];
+ o.forEach(function(x){x.e=Math.round(u*0.02*OT[x.t]);x.fit=x.d<=r.cover});
+ var a=o.filter(function(x){return x.fit}).sort(function(p,q){return p.c-q.c}),b=o.filter(function(x){return !x.fit}).sort(function(p,q){return p.d-q.d||p.c-q.c});
+ o=a.concat(b);o.forEach(function(x,i){x.rank=i+1});return o;
+}
+function why(r,o){
+ var a=o[0],air=o.filter(function(x){return x.t==='air'})[0],u=r.gap*r.demand;
+ if(a.fit){var s='<b>Rank 1: '+a.n+'.</b> It arrives in '+dy(a.d)+', before stock ends in '+dy(r.cover)+', at $'+num(Math.round(a.c))+' for '+num(u)+' units.';
+  if(a.t!=='air')s+=' Air freight would cost '+(air.c/a.c).toFixed(1)+' times more and emit '+(air.e/Math.max(1,a.e)).toFixed(1)+' times more CO2e.';
+  return s+' The rules engine ranks the options by lowest cost among those that arrive before stock ends.'}
+ return '<b>No option arrives before stock ends in '+dy(r.cover)+'.</b> Fastest is '+a.n+' in '+dy(a.d)+', so a short stoppage of about '+dy(a.d-r.cover)+' remains. Consider partial allocation to the most critical line while it ships.';
+}
+function draftMsg(r,lang,a){
+ var cp=a.t==='micro'?r.sup:a.t==='sto'?'Plant '+(1+r.id%3)+' team':a.t==='cod'?'Logistics team':'Forwarder',u=num(r.gap*r.demand);
+ if(lang==='id')return 'Kepada '+cp+',\n\nPO '+r.id+' ('+r.item+') terlambat '+r.delay+' hari. Stok kami habis dalam '+r.cover+' hari. Mohon konfirmasi '+a.n+' sebanyak '+u+' unit dalam '+a.d+' hari. Mohon balas hari ini.\n\nTerima kasih.';
+ if(lang==='ja')return cp+' 御中\n\nPO '+r.id+'('+r.item+')の納期が'+r.delay+'日遅れています。在庫は'+r.cover+'日で尽きます。'+a.n+'で'+u+'個を'+a.d+'日以内に手配できるか、本日中にご確認ください。\n\nよろしくお願いいたします。';
+ return 'Hi '+cp+',\n\nPO '+r.id+' ('+r.item+', '+num(r.qty)+' units) is now '+r.delay+' days late and our stock runs out in '+r.cover+' days. Please confirm '+a.n+' for '+u+' units within '+dy(a.d)+'. We need your reply today.\n\nThanks.';
+}
+function drawActs(){
+ var d=delayed().filter(function(r){return r.risk==='high'&&!APPR[r.id]}).sort(function(a,b){return a.cover-b.cover}).slice(0,3);
+ el('acts').innerHTML=d.length?d.map(function(r){var rc=best(r);
+  return '<div class="act"><div class="t"><b>PO '+r.id+' '+r.item+'</b><span>Stock ends in '+dy(r.cover)+', ETA slipped '+dy(r.delay)+'</span></div><div class="r">'+rc.n+'<br>$'+num(Math.round(rc.c))+', '+dy(rc.d)+'</div><button class="btn p" data-po="'+r.id+'">Review</button></div>'}).join(''):'<div class="sub">Nothing urgent left in this view.</div>';
+ document.querySelectorAll('[data-po]').forEach(function(b){b.onclick=function(){jump(+b.getAttribute('data-po'))}});
+}
+function jump(id){el('q').value=id;el('fs').value='all';el('fr').value='all';el('fg').value='all';open[id]=true;page=0;el('det').open=true;drawTable();el('tcard').scrollIntoView({behavior:'smooth'})}
+function drawGroups(){
+ var g=groupsOf(cur),mx=g.length?g[0].n:1;
+ el('groups').innerHTML=g.map(function(x){return '<div class="grp" data-g="'+x.l+'"><div class="gtop"><span class="gname">'+x.l+'</span><span>'+x.n+' POs<span class="chip '+(x.r?'medium':'low')+'" style="margin-left:8px">'+x.r+' at risk</span></span></div><div class="stack"><i style="width:0;background:var(--red)" data-w="'+(x.r/mx*100)+'"></i><i style="width:0;background:var(--blue)" data-w="'+((x.n-x.r)/mx*100)+'"></i></div></div>'}).join('')||'<div class="sub">No delays.</div>';
+ growBars(el('groups'));
+ document.querySelectorAll('.grp').forEach(function(e){e.onclick=function(){var v=e.getAttribute('data-g'),s=el('fg');for(var i=0;i<s.options.length;i++){if(s.options[i].value.indexOf(v)===0){s.value=s.options[i].value;break}}el('fs').value='delayed';el('q').value='';page=0;drawTable();el('tcard').scrollIntoView({behavior:'smooth'})}});
+}
+function drawSev(){
+ var d=delayed(),names=['Minor','Moderate','Major','Critical'],cl=['var(--blue)','var(--amber)','var(--red)','var(--red)'],c={Minor:0,Moderate:0,Major:0,Critical:0};
+ d.forEach(function(r){c[sev(r.delay)]++});var mx=Math.max(1,Math.max.apply(null,names.map(function(n){return c[n]})));
+ var rg=['1 to '+SEV[0],(SEV[0]+1)+' to '+SEV[1],(SEV[1]+1)+' to '+SEV[2],(SEV[2]+1)+'+'];
+ el('sevbars').innerHTML=names.map(function(n,i){return '<div class="sv"><span><span class="chip '+n+'">'+n+'</span></span><div class="b"><i style="width:'+(c[n]/mx*100)+'%;background:'+cl[i]+'"></i></div><span>'+c[n]+'</span></div><div class="sub" style="margin:-4px 0 6px 86px">'+rg[i]+' days late</div>'}).join('');
+}
+function drawEsc(){
+ var d=sel().filter(function(r){return r.hist.length>=3&&r.delay>TOL}).sort(function(a,b){return b.delay-a.delay});
+ el('esc').innerHTML=d.slice(0,5).map(function(r){return '<div class="esc" data-id="'+r.id+'"><div><b>PO '+r.id+' '+r.item+'</b><div class="sub">'+r.g+'</div></div><span class="arrow">'+r.hist.map(function(h){return h.d}).join(' &rarr; ')+' d</span></div>'}).join('')||'<div class="sub">No escalating delays in this view.</div>';
+ document.querySelectorAll('.esc').forEach(function(e){e.onclick=function(){jump(+e.getAttribute('data-id'))}});
+}
+function groupOptions(){
+ var names={};sel().forEach(function(r){if(isDel(r))names[r.g]=1});
+ var s=el('fg'),old=s.value;s.innerHTML='<option value="all">All delay groups</option>'+Object.keys(names).map(function(n){return '<option>'+n+'</option>'}).join('');if(names[old])s.value=old;
+}
+var COLS=[['','',0],['PO','id'],['Item','item'],['Supplier','sup'],['Planner','pl'],['Delay group','g'],['Contract','cdd'],['Expected','edd'],['Late','delay'],['Severity','delay'],['Cover','cover'],['Status','risk']];
+var RANK={high:0,medium:1,low:2,tol:3,ok:4};
+function drawHead(){el('thead').innerHTML='<tr>'+COLS.map(function(c){return '<th data-s="'+c[1]+'">'+c[0]+(c[1]===sk&&c[0]!=='Severity'?(sd>0?' &#9650;':' &#9660;'):'')+'</th>'}).join('')+'</tr>';
+ document.querySelectorAll('#thead th').forEach(function(t){t.onclick=function(){var k=t.getAttribute('data-s');if(!k)return;if(sk===k)sd=-sd;else{sk=k;sd=1}page=0;drawTable()}})}
+var LBL={high:'Act today',medium:'Stockout risk',low:'Delayed, covered',tol:'Within tolerance',ok:'On time',appr:'Approved'};
+
+function stepChart(r){
+ var h=r.hist;if(!h.length)return '';
+ var W=230,H=86,mx=Math.max.apply(null,h.map(function(x){return x.d}))*1.15,pts=h.map(function(x,i){return[16+i*((W-40)/Math.max(1,h.length-1)),H-16-(x.d/mx)*(H-30),x.d]});
+ var path='M16 '+(H-16);pts.forEach(function(p,i){path+=' L'+p[0]+' '+(i?pts[i-1][1]:H-16)+' L'+p[0]+' '+p[1]});
+ return '<svg viewBox="0 0 '+W+' '+H+'" width="100%" role="img" aria-label="Delay duration over time"><line x1="16" y1="'+(H-16)+'" x2="'+(W-8)+'" y2="'+(H-16)+'" stroke="var(--line)"/><path d="'+path+'" fill="none" stroke="var(--red)" stroke-width="2"/>'+pts.map(function(p){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="3.5" fill="var(--red)"/><text x="'+p[0]+'" y="'+(p[1]-7)+'" font-size="10" text-anchor="middle" fill="var(--ink)">'+p[2]+' d</text>'}).join('')+'</svg>';
+}
+function detail(r){
+ var o=r._api?r._api.opts:opts(r),a=APPR[r.id],onh=Math.floor(r.cover*r.demand*0.7),inb=r.cover*r.demand-onh;
+ var A='<div class="b"><h3>Why it is late</h3>'+(r.note?'<div class="notice">'+r.note+'</div><div class="json">{ "reason": "'+r.g+'",<br>&nbsp;&nbsp;"new_eta": "'+fd(r.edd)+'",<br>&nbsp;&nbsp;"confidence": '+r.conf+' }</div><div class="sub" style="margin-top:6px">Gemini read the notice, and the rules engine re-checks the dates.</div>':'<div class="sub">No delay. Tracking matches the contract date.</div>')+'</div>';
+ var B='<div class="b"><h3>Delay dynamics</h3>'+(r.hist.length?stepChart(r)+r.hist.map(function(h){return '<div class="ev"><span>'+fd(h.day)+' ('+h.src+')</span><b>'+h.d+' d late</b></div>'}).join('')+'<div class="ev"><span>Contract date</span><b>'+fd(r.cdd)+'</b></div><div class="ev"><span>Expected now</span><b>'+fd(r.edd)+'</b></div>':'<div class="sub">No date changes recorded.</div>')+'</div>';
+ var C='<div class="b"><h3>Stockout risk engine</h3><div class="ev"><span>On hand</span><b>'+num(onh)+' units</b></div><div class="ev"><span>Other inbound before expected date</span><b>'+num(inb)+' units</b></div><div class="ev"><span>Forecast demand</span><b>'+num(r.demand)+' / day</b></div><div class="ev"><span>Cover</span><b>'+dy(r.cover)+', ends '+fd(r.cover)+'</b></div><div class="ev"><span>Expected arrival</span><b>'+fd(r.edd)+'</b></div>'+(r.gap?'<div class="ev"><span style="color:var(--red)">Gap</span><b style="color:var(--red)">'+dy(r.gap)+', '+num(r.gap*r.demand)+' units short</b></div>':'<div class="ev"><span>Gap</span><b style="color:var(--green)">None, stock covers the delay</b></div>')+'</div>';
+ var D;
+ if(!o.length)D='<div class="b"><h3>Recovery options</h3><div class="sub">No shortfall, so no recovery action is needed. The engine keeps watching.</div></div>';
+ else{
+  D='<div class="b"><h3><span style="color:var(--violet)">Gemini decision copilot</span></h3><p class="why">'+why(r,o)+'</p><table class="ot"><thead><tr><th></th><th>Option</th><th>Arrives</th><th>Cost</th><th>CO2e</th><th>Before stock ends</th></tr></thead><tbody>'+o.map(function(x){return '<tr class="'+(x.rank===1?'rec':'')+'"><td><span class="rk">'+x.rank+'</span></td><td>'+x.n+'</td><td>'+dy(x.d)+'</td><td>$'+num(Math.round(x.c))+'</td><td>'+num(x.e)+' kg</td><td>'+(x.fit?'Yes':'No')+'</td></tr>'}).join('')+'</tbody></table><div class="sub" style="margin-top:4px">'+(r._api?'Computed by the Vinkla API (rules engine on Cloud Run). ':'Local estimate. ')+'Illustrative costs and emission factors.</div>';
+  if(a)D+='<div class="okbox" style="margin-top:10px">'+a.n+' is '+a.state+'. Approval '+a.aid+' is saved in Firestore ('+a.t+'). '+(a.state==='confirmed'?'':'<button class="btn" data-adv="'+r.id+'">Mark as '+({approved:'submitted',submitted:'confirmed'}[a.state])+'</button>')+'</div>';
+  else D+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn v" data-draft="'+r.id+'">Draft supplier message</button><select data-lang="'+r.id+'" class="btn"><option value="en">English</option><option value="id">Bahasa Indonesia</option><option value="ja">Japanese</option></select><button class="btn p" data-ap="'+r.id+'">Approve and write to ERP</button></div><div id="dr'+r.id+'"></div>';
+  D+='</div>';
+ }
+ return '<div class="dg">'+A+B+C+'</div><div class="dg2">'+D+'</div>';
+}
+function drawTable(){
+ var q=el('q').value.toLowerCase(),fs=el('fs').value,fr=el('fr').value,fg=el('fg').value;
+ var d=sel().filter(function(r){
+  if(fs==='delayed'&&!isDel(r))return false;
+  if(fr==='atrisk'){if(r.risk!=='high'&&r.risk!=='medium')return false}else if(fr!=='all'&&r.risk!==fr)return false;
+  if(fg!=='all'&&r.g!==fg)return false;
+  if(IDSET&&!IDSET.has(r.id))return false;
+  if(q&&(String(r.id)+' '+r.item+' '+r.sup+' '+r.g).toLowerCase().indexOf(q)<0)return false;
+  return true});
+ d.sort(function(a,b){var x,y;if(sk==='risk'){var ea=eff(a),eb=eff(b);x=RANK[ea==='appr'?a.risk:ea]*100+a.cover;y=RANK[eb==='appr'?b.risk:eb]*100+b.cover}else{x=a[sk];y=b[sk]}return(x<y?-1:x>y?1:0)*sd});
+ var pages=Math.max(1,Math.ceil(d.length/PS));if(page>=pages)page=pages-1;
+ var s=d.slice(page*PS,page*PS+PS);
+ el('tbody').innerHTML=s.map(function(r){var o=open[r.id],e=eff(r);
+  return '<tr class="r'+(o?' open':'')+'" data-id="'+r.id+'"><td><span class="car">&#9656;</span></td><td><b>'+r.id+'</b></td><td>'+r.item+'</td><td>'+r.sup+'</td><td>'+PL[r.pl].name+'</td><td>'+r.g+'</td><td>'+fd(r.cdd)+'</td><td>'+fd(r.edd)+'</td><td>'+(r.delay?'+'+r.delay+' d':'-')+'</td><td>'+(r.delay?'<span class="chip '+sev(r.delay)+'">'+sev(r.delay)+'</span>':'-')+'</td><td>'+r.cover+' d</td><td><span class="chip '+e+'">'+LBL[e]+'</span></td></tr>'+(o?'<tr class="det"><td colspan="12">'+detail(r)+'</td></tr>':'')}).join('')||'<tr><td colspan="12" style="padding:24px;text-align:center;color:var(--mute)">No POs match these filters.</td></tr>';
+ document.querySelectorAll('#tbody tr.r').forEach(function(t){t.onclick=function(){var id=+t.getAttribute('data-id');open[id]=!open[id];drawTable()}});
+ document.querySelectorAll('[data-draft]').forEach(function(b){b.onclick=function(){var id=+b.getAttribute('data-draft'),lg=document.querySelector('[data-lang="'+id+'"]').value,box=el('dr'+id),name={en:'English',id:'Bahasa Indonesia',ja:'Japanese'}[lg];box.innerHTML='<div class="sub" style="margin-top:8px">Gemini is drafting...</div>';post('/v1/chat',{sid:SID,messages:[{role:'user',text:'Draft a supplier message in '+name+' for PO '+id+'.'}]}).then(function(res){box.innerHTML='<div class="dr">'+md(res.reply)+'</div><div class="sub">Gemini drafted this from live data. Nothing is sent until you approve.</div>'}).catch(function(e){box.innerHTML='<div class="sub" style="color:var(--red)">'+e.message+'</div>'})}});
+ document.querySelectorAll('[data-ap]').forEach(function(b){b.onclick=function(){approve(+b.getAttribute('data-ap'))}});
+ document.querySelectorAll('[data-adv]').forEach(function(b){b.onclick=function(){advanceApproval(+b.getAttribute('data-adv'))}});
+ s.forEach(function(r){if(open[r.id]&&r.gap&&!r._api&&!r._loading){r._loading=true;assessApi(r).then(function(){r._loading=false;drawTable()}).catch(function(){r._loading=false})}});
+ el('pginfo').textContent=d.length?('Showing '+(page*PS+1)+' to '+Math.min(d.length,page*PS+PS)+' of '+num(d.length)):'0 results';
+ el('tcount').textContent=num(d.length)+' rows';
+ drawHead();
+ el('prev').onclick=function(){if(page>0){page--;drawTable()}};
+ el('next').onclick=function(){if(page<pages-1){page++;drawTable()}};
+ window._page=s;
+}
+function toast(t){var e=el('toast');e.textContent=t;e.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(function(){e.style.display='none'},2800)}
+function approve(id){
+ var r=BYID[id],a=best(r);
+ post('/v1/approvals',{poId:String(id),optionKind:KIND[a.t],optionLabel:a.n,totalCost:Math.round(a.c),co2eKg:a.e,approvedBy:'planner'}).then(function(res){
+  APPR[id]={n:a.n,aid:res.id,state:res.state,t:clock()};
+  LOG.unshift('<div><time>'+clock()+'</time><span><b>PO '+id+'</b> '+a.n+' approved. Firestore approval '+res.id+'.</span></div>');
+  el('log').innerHTML=LOG.join('');toast('Approval saved: '+res.id);drawActs();drawTable();
+ }).catch(function(e){toast('Approval failed: '+e.message)});
+}
+function advanceApproval(id){
+ var a=APPR[id];
+ post('/v1/approvals/'+a.aid+'/advance',{}).then(function(res){a.state=res.state;LOG.unshift('<div><time>'+clock()+'</time><span><b>PO '+id+'</b> approval is now '+res.state+'.</span></div>');el('log').innerHTML=LOG.join('');drawTable()}).catch(function(e){toast(e.message)});
+}
+
+var FEED=[],livePaused=false;
+function liveEvent(){
+ if(livePaused)return;
+ var c=ROWS.filter(function(r){return r.risk!=='ok'&&!APPR[r.id]&&(cur==='all'||r.pl===cur)}),r=c[Math.floor(Math.random()*c.length)];
+ if(!r)return;
+ var inc=r.risk==='low'?1:ri(1,2);
+ if(r.risk==='low'&&r.cover<r.edd+inc)return;
+ var old=r.edd;r.delay+=inc;r.edd+=inc;r.gap=Math.max(0,r.edd-r.cover);r._api=null;r.hist.push({day:0,d:r.delay,src:'Carrier ETA'});
+ FEED.unshift('<div><time>'+clock()+'</time><span><b>PO '+r.id+'</b> '+r.item+': expected date '+fd(old)+' to '+fd(r.edd)+', now '+dy(r.delay)+' late ('+r.g.split(',')[0].toLowerCase()+').</span></div>');
+ FEED=FEED.slice(0,5);el('feed').innerHTML=FEED.join('');
+ drawKpis(false);drawSev();drawEsc();drawTable();
+}
+
+function drawAll(){drawTabs();drawKpis(true);brief();drawActs();drawGroups();drawSev();drawEsc();groupOptions();drawTable()}
+
+['q','fs','fr','fg'].forEach(function(id){el(id).addEventListener('input',function(){IDSET=null;page=0;drawTable()})});
+el('regen').onclick=brief;
+el('livebtn').onclick=function(){livePaused=!livePaused;this.textContent=livePaused?'Resume':'Pause';el('livedot').classList.toggle('off',livePaused)};
+el('expall').onclick=function(){var all=window._page.every(function(r){return open[r.id]});window._page.forEach(function(r){open[r.id]=!all});this.textContent=all?'Expand page':'Collapse page';drawTable()};
+el('tol').oninput=function(){TOL=+this.value;el('tolv').textContent=TOL;page=0;drawAll()};
+['s0','s1','s2'].forEach(function(id,i){el(id).oninput=function(){var v=+this.value;if(v>0){SEV[i]=v;for(var j=1;j<3;j++){if(SEV[j]<=SEV[j-1])SEV[j]=SEV[j-1]+1}el('s1').value=SEV[1];el('s2').value=SEV[2];drawSev();drawTable()}}});
+
+var chatOn=false;
+function cm(){return el('cm')}
+function addMsg(cls,html){var d=document.createElement('div');d.className='msg '+cls;d.innerHTML=html;cm().appendChild(d);cm().scrollTop=cm().scrollHeight;return d}
+function showTable(risk){el('fs').value='delayed';el('fr').value=risk||'all';el('fg').value='all';el('q').value='';page=0;el('det').open=true;drawTable();el('tcard').scrollIntoView({behavior:'smooth'})}
+function tools(a){return '<div class="tl">'+a.map(function(t){return '<span>'+t+'</span>'}).join('')+'</div>'}
+function md(t){
+ var h=String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').split('\n'),out='',inList=false;
+ h.forEach(function(l){
+  var m=l.match(/^\s*[*-]\s+(.*)/),f=function(x){return x.replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')};
+  if(m){if(!inList){out+='<ul style="margin:4px 0;padding-left:18px">';inList=true}out+='<li>'+f(m[1])+'</li>'}
+  else{if(inList){out+='</ul>';inList=false}out+=l.trim()?f(l)+'<br>':''}
+ });
+ return out+(inList?'</ul>':'');
+}
+function ask(q){
+ if(!q.trim())return;
+ addMsg('u',q.replace(/</g,'&lt;'));
+ var w=addMsg('g','<span class="dots"><span></span><span></span><span></span></span>');
+ CHAT.push({role:'user',text:q});
+ post('/v1/chat',{sid:SID,messages:CHAT.slice(-10)}).then(function(res){
+  CHAT.push({role:'model',text:res.reply});
+  w.innerHTML=(res.toolCalls.length?tools(res.toolCalls.map(function(c){return c.name+'('+Object.keys(c.args||{}).map(function(k){return k+'='+c.args[k]}).join(', ')+')'})):'')+md(res.reply)+(res.poIds.length>1?'<div style="margin-top:6px"><button class="btn" data-ids="1">Show '+res.poIds.length+' POs in the table</button></div>':'');
+  var b=w.querySelector('[data-ids]');if(b)b.onclick=function(){IDSET=new Set(res.poIds);el('fs').value='all';el('fr').value='all';el('fg').value='all';el('q').value='';page=0;el('det').open=true;drawTable();el('tcard').scrollIntoView({behavior:'smooth'})};
+  cm().scrollTop=cm().scrollHeight;
+ }).catch(function(e){CHAT.pop();w.innerHTML='<span style="color:var(--red)">'+e.message+'</span>';cm().scrollTop=cm().scrollHeight});
+}
+var SG=['Which POs risk a stockout in 14 days?','Which delays are escalating?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa'];
+function openChat(on){chatOn=on;el('chat').classList.toggle('on',on);el('fab').style.display=on?'none':'flex';
+ if(on&&!cm().children.length){addMsg('g','Hi, I am your planner copilot. I read the delay data above and can draft messages. What do you want to check?');
+  el('sg').innerHTML=SG.map(function(x){return '<button>'+x+'</button>'}).join('');
+  document.querySelectorAll('#sg button').forEach(function(b){b.onclick=function(){ask(b.textContent)}})}}
+el('fab').onclick=function(){openChat(true)};
+el('cx').onclick=function(){openChat(false)};
+el('cf').onsubmit=function(e){e.preventDefault();var i=el('ci');ask(i.value);i.value=''};
+
+var GROUP={port_congestion:'Port congestion',weather:'Weather',vessel_schedule:'Vessel schedule',customs:'Customs hold',supplier_production:'Supplier production slip',documentation:'Documentation',labour_action:'Labour action',transport_capacity:'Trucking shortage',other:'Other'};
+var MID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+function sampleNotice(i){
+ var pick=[ROWS.filter(function(r){return r.risk==='high'})[0],ROWS.filter(function(r){return r.pl==='b'&&r.risk==='medium'})[0],ROWS.filter(function(r){return r.pl==='c'&&r.risk==='medium'})[0]][i],d=new Date(2026,5,1+pick.edd+3);
+ if(i===0)return'Dear team, due to berth congestion the vessel will omit the port. PO '+pick.id+' ('+pick.item+') is now expected on '+d.toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})+'. Regards, ACME Forwarding';
+ if(i===1)return'Yth. Bapak/Ibu, kapal terlambat karena cuaca buruk. Pengiriman PO '+pick.id+' diperkirakan tiba pada '+d.getDate()+' '+MID[d.getMonth()]+' '+d.getFullYear()+'.';
+ return'PO '+pick.id+' の出荷は、サプライヤーの生産遅延のため、'+d.getFullYear()+'年'+(d.getMonth()+1)+'月'+d.getDate()+'日に変更となります。';
+}
+function applyExtraction(ex,notice){
+ var todo=ex.items.filter(function(i){return i.newArrivalDate&&BYID[+i.poReference]});
+ return Promise.all(todo.map(function(i){return post('/v1/sessions/'+SID+'/pos/'+i.poReference+'/eta',{newArrivalDate:i.newArrivalDate,reason:ex.reason,confidence:ex.confidence,note:notice,source:'Gemini read notice'}).then(function(row){var k=ROWS.findIndex(function(r){return r.id===row.id});ROWS[k]=row;BYID[row.id]=row})})).then(function(){drawAll();if(todo.length)jump(+todo[0].poReference)});
+}
+document.querySelectorAll('[data-sample]').forEach(function(b){b.onclick=function(){el('nt').value=sampleNotice(+b.getAttribute('data-sample'))}});
+el('nx').onclick=function(){
+ var t=el('nt').value.trim(),out=el('nr');
+ if(!t){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">Paste a notice or pick a sample first.</div>';return}
+ out.innerHTML='<div class="sub" style="margin-top:8px">Asking Gemini...</div>';
+ post('/v1/notices/extract',{notice:t,referenceDate:'2026-06-01',knownPoIds:ROWS.map(function(r){return String(r.id)})}).then(function(ex){
+  var ok=!ex.issues.length&&ex.items.length&&ex.items.every(function(i){return i.newArrivalDate});
+  out.innerHTML='<div class="json" style="margin-top:8px">'+ex.items.map(function(i){return 'PO '+i.poReference+' &rarr; '+(i.newArrivalDate||'no date')}).join('<br>')+(ex.items.length?'<br>':'No PO found<br>')+'reason: '+ex.reason+', confidence: '+ex.confidence+'</div>'+ex.items.map(function(i){return '<div class="notice" style="margin-top:6px">'+i.evidence.replace(/</g,'&lt;')+'</div>'}).join('')+(ex.issues.length?'<div class="sub" style="color:var(--red)">Checks failed: '+ex.issues.join('; ').replace(/</g,'&lt;')+'</div>':'<div class="sub" style="color:var(--green)">Checks passed. Every quote, PO and date matches the notice.</div>')+(ok?'<div style="margin-top:8px"><button class="btn p" id="ap">Apply to '+ex.items.length+' PO'+(ex.items.length>1?'s':'')+'</button></div>':'');
+  if(ok)el('ap').onclick=function(){out.innerHTML='<div class="sub" style="margin-top:8px">Saving to Firestore...</div>';applyExtraction(ex,t).then(function(){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--green)">Saved. Expected dates and risk were recalculated on the server.</div>'}).catch(function(e){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">'+e.message+'</div>'})};
+ }).catch(function(e){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">Extraction failed: '+e.message+'</div>'});
+};
+FEED=['<div><time>--:--</time><span>Waiting for the next carrier event.</span></div>'];el('feed').innerHTML=FEED.join('');
+function boot(){
+ ['k1','k2','k4'].forEach(function(id){el(id).innerHTML=''});
+ el('k3').innerHTML='<div class="sub">Loading 5,000 POs from Firestore...</div>';
+ getJson('/v1/dataset?sid='+SID).then(function(d){
+  ROWS=d.rows;BYID={};ROWS.forEach(function(r){BYID[r.id]=r});
+  drawAll();
+ }).catch(function(e){el('k3').innerHTML='<div class="sub" style="color:var(--red)">Could not load the data: '+e.message+' <button class="btn" id="retry">Retry</button></div>';el('retry').onclick=boot});
+}
+el('reset').onclick=function(){post('/v1/sessions/'+SID+'/reset',{}).then(function(){APPR={};LOG=[];el('log').innerHTML='<div>No approvals yet. Approve an option in the table below.</div>';IDSET=null;toast('Demo data reset');boot()}).catch(function(e){toast(e.message)})};
+boot();setInterval(liveEvent,6000);
+</script>
+</body>
+</html>

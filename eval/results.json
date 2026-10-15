@@ -1,0 +1,1032 @@
+{
+ "ranAt": "2026-10-15T18:10:25.487Z",
+ "url": "https://vinkla-api-334409609237.asia-southeast1.run.app",
+ "rows": [
+  {
+   "id": "en01",
+   "lang": "en",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 will arrive on 2026-06-21"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en02",
+   "lang": "en",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40008",
+      "newArrivalDate": "2026-06-28",
+      "evidence": "Container for PO 40008 now expected 28 June 2026."
+     }
+    ],
+    "reason": "weather",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en03",
+   "lang": "en",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50017",
+      "newArrivalDate": "2026-07-03",
+      "evidence": "Shipment for P/O 50017 moves to July 3, 2026."
+     }
+    ],
+    "reason": "supplier_production",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en04",
+   "lang": "en",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60044",
+      "newArrivalDate": "2026-06-15",
+      "evidence": "PO 60044 release expected 15 June 2026."
+     }
+    ],
+    "reason": "customs",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en05",
+   "lang": "en",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50102",
+      "newArrivalDate": "2026-06-12",
+      "evidence": "PO 50102 will be late, new arrival date 12 June 2026."
+     }
+    ],
+    "reason": "documentation",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en06",
+   "lang": "en",
+   "tag": "multi_po",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50033",
+      "newArrivalDate": "2026-06-19",
+      "evidence": "PO 50033 and PO 50034 now expected 2026-06-19."
+     },
+     {
+      "poReference": "50034",
+      "newArrivalDate": "2026-06-19",
+      "evidence": "PO 50033 and PO 50034 now expected 2026-06-19."
+     }
+    ],
+    "reason": "labour_action",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en07",
+   "lang": "en",
+   "tag": "relative_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60012",
+      "newArrivalDate": "2026-06-11",
+      "evidence": "PO 60012 will be delivered in 10 days."
+     }
+    ],
+    "reason": "transport_capacity",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en08",
+   "lang": "en",
+   "tag": "relative_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50009",
+      "newArrivalDate": "2026-06-15",
+      "evidence": "PO 50009 is now expected two weeks from today."
+     }
+    ],
+    "reason": "vessel_schedule",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en09",
+   "lang": "en",
+   "tag": "correction",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40201",
+      "newArrivalDate": "2026-06-24",
+      "evidence": "The correct arrival date is 24 June 2026"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en10",
+   "lang": "en",
+   "tag": "no_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40150",
+      "newArrivalDate": null,
+      "evidence": "PO 40150 is delayed because of a typhoon. We will advise the new date once the port reopens."
+     }
+    ],
+    "reason": "weather",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en11",
+   "lang": "en",
+   "tag": "no_po",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en12",
+   "lang": "en",
+   "tag": "noisy",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40077",
+      "newArrivalDate": "2026-06-18",
+      "evidence": "PO 40077 is now expected on 18 June 2026."
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "en13",
+   "lang": "en",
+   "tag": "unknown_po",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "99999",
+      "newArrivalDate": "2026-06-20",
+      "evidence": "PO 99999 will ship on 20 June 2026."
+     }
+    ],
+    "reason": "supplier_production",
+    "confidence": 0.9,
+    "issues": [
+     "PO 99999 is not a known open PO"
+    ]
+   }
+  },
+  {
+   "id": "en14",
+   "lang": "en",
+   "tag": "vague_reason",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60001",
+      "newArrivalDate": "2026-06-09",
+      "evidence": "PO 60001 will arrive on 9 June 2026."
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en15",
+   "lang": "en",
+   "tag": "multi_po",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-23",
+      "evidence": "PO 40123 and PO 40124 will both arrive on 2026-06-23."
+     },
+     {
+      "poReference": "40124",
+      "newArrivalDate": "2026-06-23",
+      "evidence": "PO 40123 and PO 40124 will both arrive on 2026-06-23."
+     }
+    ],
+    "reason": "vessel_schedule",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "en16",
+   "lang": "en",
+   "tag": "partial_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50102",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "Resin order PO 50102 is held up by port congestion. It reaches the port on Jun 21st, trucking follows."
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "h01",
+   "lang": "en",
+   "tag": "duration",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-15",
+      "evidence": "PO 40123 was due on 10 June 2026. It is delayed by 5 days."
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h02",
+   "lang": "en",
+   "tag": "multi_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 will arrive on 21 June 2026"
+     },
+     {
+      "poReference": "40124",
+      "newArrivalDate": "2026-06-25",
+      "evidence": "PO 40124 will arrive on 25 June 2026"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h03",
+   "lang": "en",
+   "tag": "quoted_thread",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40201",
+      "newArrivalDate": "2026-06-24",
+      "evidence": "new date is 24 June 2026 for PO 40201"
+     }
+    ],
+    "reason": "other",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "h04",
+   "lang": "en",
+   "tag": "injection",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 arrives 2026-06-21"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h05",
+   "lang": "en",
+   "tag": "injection",
+   "items": false,
+   "reason": true,
+   "issues": false,
+   "exact": false,
+   "got": {
+    "items": [
+     {
+      "poReference": "99999",
+      "newArrivalDate": "2026-12-31",
+      "evidence": "PO 99999 with date 2026-12-31"
+     },
+     {
+      "poReference": "40150",
+      "newArrivalDate": "2026-07-03",
+      "evidence": "PO 40150 slips to 3 July 2026"
+     }
+    ],
+    "reason": "labour_action",
+    "confidence": 0.9,
+    "issues": [
+     "PO 99999 is not a known open PO"
+    ]
+   }
+  },
+  {
+   "id": "h06",
+   "lang": "en",
+   "tag": "vague_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40124",
+      "newArrivalDate": null,
+      "evidence": "PO 40124 will arrive in late June."
+     }
+    ],
+    "reason": "other",
+    "confidence": 0.7,
+    "issues": []
+   }
+  },
+  {
+   "id": "h07",
+   "lang": "en",
+   "tag": "vague_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40077",
+      "newArrivalDate": null,
+      "evidence": "PO 40077 is expected in the second half of June."
+     }
+    ],
+    "reason": "other",
+    "confidence": 0.8,
+    "issues": []
+   }
+  },
+  {
+   "id": "h08",
+   "lang": "en",
+   "tag": "mixed_language",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60044",
+      "newArrivalDate": "2026-06-22",
+      "evidence": "PO 60044 delayed karena cuaca buruk, new ETA 22 Juni 2026."
+     }
+    ],
+    "reason": "weather",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "h09",
+   "lang": "vi",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 dự kiến đến vào ngày 21/06/2026."
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h10",
+   "lang": "ko",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123의 도착이 2026년 6월 21일로 변경되었습니다."
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h11",
+   "lang": "ms",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 dijangka tiba pada 21 Jun 2026."
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h12",
+   "lang": "en",
+   "tag": "noisy",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50033",
+      "newArrivalDate": "2026-06-19",
+      "evidence": "1,250 kg, now arriving 2026-06-19"
+     }
+    ],
+    "reason": "labour_action",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h13",
+   "lang": "en",
+   "tag": "no_po",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [],
+    "reason": "other",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "h14",
+   "lang": "en",
+   "tag": "not_a_delay",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h15",
+   "lang": "en",
+   "tag": "early",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40124",
+      "newArrivalDate": "2026-06-08",
+      "evidence": "PO 40124 will arrive early, on 8 June 2026."
+     }
+    ],
+    "reason": "other",
+    "confidence": 0.5,
+    "issues": []
+   }
+  },
+  {
+   "id": "h16",
+   "lang": "en",
+   "tag": "no_year",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40201",
+      "newArrivalDate": "2026-06-24",
+      "evidence": "PO 40201 is now expected on 24 June."
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h17",
+   "lang": "en",
+   "tag": "distractor",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 arrives 21 June 2026"
+     },
+     {
+      "poReference": "40124",
+      "newArrivalDate": "2026-06-23",
+      "evidence": "PO 40124 arrives 23 June 2026"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h18",
+   "lang": "ja",
+   "tag": "relative_date",
+   "items": true,
+   "reason": true,
+   "issues": false,
+   "exact": false,
+   "got": {
+    "items": [
+     {
+      "poReference": "50001",
+      "newArrivalDate": "2026-06-11",
+      "evidence": "PO 50001 ちち10日後に到着予定です。"
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": [
+     "evidence for PO 50001 is not a passage of the notice"
+    ]
+   }
+  },
+  {
+   "id": "h19",
+   "lang": "zh",
+   "tag": "multi_po",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-23",
+      "evidence": "PO 40123 和 PO 40124 都将于2026年6月23日到达"
+     },
+     {
+      "poReference": "40124",
+      "newArrivalDate": "2026-06-23",
+      "evidence": "PO 40123 和 PO 40124 都将于2026年6月23日到达"
+     }
+    ],
+    "reason": "vessel_schedule",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "h20",
+   "lang": "en",
+   "tag": "no_cause",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40150",
+      "newArrivalDate": "2026-07-03",
+      "evidence": "PO 40150 is delayed. New date 2026-07-03."
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "id01",
+   "lang": "id",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60044",
+      "newArrivalDate": "2026-06-20",
+      "evidence": "PO 60044 diperkirakan tiba 20 Juni 2026."
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "id02",
+   "lang": "id",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50017",
+      "newArrivalDate": "2026-07-03",
+      "evidence": "Pengiriman PO 50017 diundur menjadi 3 Juli 2026."
+     }
+    ],
+    "reason": "supplier_production",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "id03",
+   "lang": "id",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-16",
+      "evidence": "PO 40123 baru dapat dikirim pada 16 Juni 2026."
+     }
+    ],
+    "reason": "customs",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "id04",
+   "lang": "id",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50009",
+      "newArrivalDate": "2026-06-25",
+      "evidence": "Kapal untuk PO 50009 tertunda dan tiba pada 25 Juni 2026."
+     }
+    ],
+    "reason": "weather",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "id05",
+   "lang": "id",
+   "tag": "no_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60012",
+      "newArrivalDate": null,
+      "evidence": "Pengiriman PO 60012 akan tertunda. Tanggal baru akan kami kabarkan."
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "ja01",
+   "lang": "ja",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50001",
+      "newArrivalDate": "2026-07-03",
+      "evidence": "PO 50001 の出荷は、サプライヤーの生産遅延のため、2026年7月3日に変更となります。"
+     }
+    ],
+    "reason": "supplier_production",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "ja02",
+   "lang": "ja",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40008",
+      "newArrivalDate": "2026-06-28",
+      "evidence": "PO 40008 の到着は2026年6月28日の見込みです。"
+     }
+    ],
+    "reason": "weather",
+    "confidence": 0.9,
+    "issues": []
+   }
+  },
+  {
+   "id": "ja03",
+   "lang": "ja",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "60044",
+      "newArrivalDate": "2026-06-15",
+      "evidence": "解除は2026年6月15日の予定です。"
+     }
+    ],
+    "reason": "customs",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "ja04",
+   "lang": "ja",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "す。PO 40123 は2026年6月21日に到着予定です"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "ja05",
+   "lang": "ja",
+   "tag": "no_date",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50033",
+      "newArrivalDate": null,
+      "evidence": "PO 50033 の納期は未定です。"
+     }
+    ],
+    "reason": "other",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "zh01",
+   "lang": "zh",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "40123",
+      "newArrivalDate": "2026-06-21",
+      "evidence": "PO 40123 预计于2026年6月21日到达"
+     }
+    ],
+    "reason": "port_congestion",
+    "confidence": 1,
+    "issues": []
+   }
+  },
+  {
+   "id": "zh02",
+   "lang": "zh",
+   "tag": "",
+   "items": true,
+   "reason": true,
+   "issues": true,
+   "exact": true,
+   "got": {
+    "items": [
+     {
+      "poReference": "50017",
+      "newArrivalDate": "2026-07-03",
+      "evidence": "PO 50017 的发货推迟到2026年7月3日"
+     }
+    ],
+    "reason": "supplier_production",
+    "confidence": 1,
+    "issues": []
+   }
+  }
+ ]
+}
