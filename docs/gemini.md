@@ -34,15 +34,16 @@ The dashboard disables the Apply button while any check fails.
 
 ## 2. Planner chat (function calling)
 
-The chat model has no data of its own. It calls five tools that run inside the service and read the planner's data from Firestore (`gemini/chat.ts` in the private codebase, up to five tool steps per question).
+The chat model has no data of its own. It calls six tools that run inside the service and read the planner's data from Firestore (`gemini/chat.ts` in the private codebase, up to five tool steps per question).
 
 | Tool | What it returns |
 |---|---|
-| `list_at_risk` | List open POs expected after their stock runs out, closest to running out first. |
+| `list_at_risk` | List open POs expected after their stock runs out, closest to running out first. atStockoutRisk is every such PO. actToday is the subset whose stock ends within 3 days and needs a decision now. |
 | `get_po` | Full detail of one PO: dates, stock cover, date history, delay cause and notice. |
 | `group_delays` | Count delayed POs by cause, with how many of each are at stockout risk. |
 | `get_recovery_options` | Ranked recovery options for a PO that will run short, with cost, arrival and CO2e. Empty when there is no shortage. |
-| `delivery_kpis` | Open PO counts, on-time share, delayed quantity and value. |
+| `delivery_kpis` | Snapshot of the POs open today: counts, on-time share, delayed quantity and value. Not year to date. |
+| `ytd_performance` | Year-to-date on-time delivery percentage and logistics lead time in days, with monthly values, for POs already received (January to May 2026). |
 
 System instruction:
 
@@ -50,6 +51,7 @@ System instruction:
 You are the planner copilot in Vinkla, a tool that watches delayed inbound purchase orders (POs).
 Today is 2026-06-01. Answer from the tools, never from memory. Every number, date and PO id you state must come from a tool result.
 Never add, subtract or count numbers yourself. Use totals the tools return, and call another tool if the total you need is missing.
+Answers cover all planners unless the user names one. "Act today" means actToday and "stockout risk" means atStockoutRisk, which are different numbers. Year to date means the ytd_performance tool. Open or today means the snapshot tools.
 Call a tool whenever the question needs data. If a tool returns an error or nothing, say so plainly.
 Be brief: short sentences, plain words, no filler. Use the planner's language when asked to draft a message.
 When asked to draft a supplier message, first call get_po and get_recovery_options, then write the message for the top-ranked option. State that nothing is sent until the planner approves.

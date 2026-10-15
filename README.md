@@ -27,7 +27,7 @@ For scale, the dashboard summarizes 500 delays by cause for each planner queue. 
 
 | Service | Use |
 |---|---|
-| Gemini on Vertex AI | Structured-output extraction from notices. Function-calling chat over five tools. Multilingual drafting. |
+| Gemini on Vertex AI | Structured-output extraction from notices. Function-calling chat over six tools. Multilingual drafting. |
 | Cloud Run | Hosts the API (`vinkla-api`, `asia-southeast1`): rules engine, Gemini calls, rate limiting. One warm instance, up to three. |
 | Firestore | The 5,000-PO dataset, per-session changes, and approvals with their state history. Client access is denied by rules, so only the API reads and writes. |
 | Firebase Hosting | Serves the planner dashboard. |
