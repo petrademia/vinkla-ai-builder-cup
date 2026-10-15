@@ -264,7 +264,7 @@ function el(id){return document.getElementById(id)}
 function clock(){var d=new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
 
 var PL={a:{name:'Rina',role:'Electronics components'},b:{name:'Taro',role:'Raw materials'},c:{name:'Mai',role:'Packaging'}};
-var ROWS=[],BYID={},APPR={},LOG=[],TOL=0,SEV=[3,7,14],IDSET=null,CHAT=[];
+var DRAFTS={},DLANG={},ROWS=[],BYID={},APPR={},LOG=[],TOL=0,SEV=[3,7,14],IDSET=null,CHAT=[];
 var SID=(function(){try{var k=localStorage.getItem('vinkla_sid');if(!k){k=Array.from(crypto.getRandomValues(new Uint8Array(12)),function(b){return b.toString(16).padStart(2,'0')}).join('');localStorage.setItem('vinkla_sid',k)}return k}catch(e){return 'anon'+Math.random().toString(36).slice(2,12)}})();
 var cur='all',sk='risk',sd=1,page=0,PS=15,open={};
 function sev(d){return d<=SEV[0]?'Minor':d<=SEV[1]?'Moderate':d<=SEV[2]?'Major':'Critical'}
@@ -422,7 +422,7 @@ function detail(r){
  else{
   D='<div class="b"><h3><span style="color:var(--violet)">Gemini decision copilot</span></h3><p class="why">'+why(r,o)+'</p><table class="ot"><thead><tr><th></th><th>Option</th><th>Arrives</th><th>Cost</th><th>CO2e</th><th>Before stock ends</th></tr></thead><tbody>'+o.map(function(x){return '<tr class="'+(x.rank===1?'rec':'')+'"><td><span class="rk">'+x.rank+'</span></td><td>'+x.n+'</td><td>'+dy(x.d)+'</td><td>$'+num(Math.round(x.c))+'</td><td>'+num(x.e)+' kg</td><td>'+(x.fit?'Yes':'No')+'</td></tr>'}).join('')+'</tbody></table><div class="sub" style="margin-top:4px">'+(r._api?'Computed by the Vinkla API (rules engine on Cloud Run). ':'Local estimate. ')+'Illustrative costs and emission factors.</div>';
   if(a)D+='<div class="okbox" style="margin-top:10px">'+a.n+' is '+a.state+'. Approval '+a.aid+' is saved in Firestore ('+a.t+'). '+(a.state==='confirmed'?'':'<button class="btn" data-adv="'+r.id+'">Mark as '+({approved:'submitted',submitted:'confirmed'}[a.state])+'</button>')+'</div>';
-  else D+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn v" data-draft="'+r.id+'">Draft supplier message</button><select data-lang="'+r.id+'" class="btn"><option value="en">English</option><option value="id">Bahasa Indonesia</option><option value="ja">Japanese</option></select><button class="btn p" data-ap="'+r.id+'">Approve and write to ERP</button></div><div id="dr'+r.id+'"></div>';
+  else D+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn v" data-draft="'+r.id+'">Draft supplier message</button><select data-lang="'+r.id+'" class="btn">'+[['en','English'],['id','Bahasa Indonesia'],['ja','Japanese']].map(function(l){return '<option value="'+l[0]+'"'+((DLANG[r.id]||'en')===l[0]?' selected':'')+'>'+l[1]+'</option>'}).join('')+'</select><button class="btn p" data-ap="'+r.id+'">Approve and write to ERP</button></div><div id="dr'+r.id+'">'+(DRAFTS[r.id]||'')+'</div>';
   D+='</div>';
  }
  return '<div class="dg">'+A+B+C+'</div><div class="dg2">'+D+'</div>';
@@ -442,7 +442,8 @@ function drawTable(){
  el('tbody').innerHTML=s.map(function(r){var o=open[r.id],e=eff(r);
   return '<tr class="r'+(o?' open':'')+'" data-id="'+r.id+'"><td><span class="car">&#9656;</span></td><td><b>'+r.id+'</b></td><td>'+r.item+'</td><td>'+r.sup+'</td><td>'+PL[r.pl].name+'</td><td>'+r.g+'</td><td>'+fd(r.cdd)+'</td><td>'+fd(r.edd)+'</td><td>'+(r.delay?'+'+r.delay+' d':'-')+'</td><td>'+(r.delay?'<span class="chip '+sev(r.delay)+'">'+sev(r.delay)+'</span>':'-')+'</td><td>'+r.cover+' d</td><td><span class="chip '+e+'">'+LBL[e]+'</span></td></tr>'+(o?'<tr class="det"><td colspan="12">'+detail(r)+'</td></tr>':'')}).join('')||'<tr><td colspan="12" style="padding:24px;text-align:center;color:var(--mute)">No POs match these filters.</td></tr>';
  document.querySelectorAll('#tbody tr.r').forEach(function(t){t.onclick=function(){var id=+t.getAttribute('data-id');open[id]=!open[id];drawTable()}});
- document.querySelectorAll('[data-draft]').forEach(function(b){b.onclick=function(){var id=+b.getAttribute('data-draft'),lg=document.querySelector('[data-lang="'+id+'"]').value,box=el('dr'+id),name={en:'English',id:'Bahasa Indonesia',ja:'Japanese'}[lg];box.innerHTML='<div class="sub" style="margin-top:8px">Gemini is drafting...</div>';post('/v1/chat',{sid:SID,messages:[{role:'user',text:'Draft a supplier message in '+name+' for PO '+id+'.'}]}).then(function(res){box.innerHTML='<div class="dr">'+md(res.reply)+'</div><div class="sub">Gemini drafted this from live data. Nothing is sent until you approve.</div>'}).catch(function(e){box.innerHTML='<div class="sub" style="color:var(--red)">'+e.message+'</div>'})}});
+ document.querySelectorAll('[data-lang]').forEach(function(b){b.onchange=function(){DLANG[+b.getAttribute('data-lang')]=b.value}});
+ document.querySelectorAll('[data-draft]').forEach(function(b){b.onclick=function(){var id=+b.getAttribute('data-draft'),lg=document.querySelector('[data-lang="'+id+'"]').value,box=el('dr'+id),name={en:'English',id:'Bahasa Indonesia',ja:'Japanese'}[lg];DLANG[id]=lg;DRAFTS[id]='<div class="sub" style="margin-top:8px">Gemini is drafting...</div>';box.innerHTML=DRAFTS[id];post('/v1/chat',{sid:SID,messages:[{role:'user',text:'Draft a supplier message in '+name+' for PO '+id+'.'}]}).then(function(res){DRAFTS[id]='<div class="dr">'+md(res.reply)+'</div><div class="sub">Gemini drafted this from live data. Nothing is sent until you approve.</div>'}).catch(function(e){DRAFTS[id]='<div class="sub" style="color:var(--red)">'+e.message+'</div>'}).then(function(){var b2=el('dr'+id);if(b2)b2.innerHTML=DRAFTS[id]})}});
  document.querySelectorAll('[data-ap]').forEach(function(b){b.onclick=function(){approve(+b.getAttribute('data-ap'))}});
  document.querySelectorAll('[data-adv]').forEach(function(b){b.onclick=function(){advanceApproval(+b.getAttribute('data-adv'))}});
  s.forEach(function(r){if(open[r.id]&&r.gap&&!r._api&&!r._loading){r._loading=true;assessApi(r).then(function(){r._loading=false;drawTable()}).catch(function(){r._loading=false})}});
@@ -556,7 +557,7 @@ function boot(){
   drawAll();
  }).catch(function(e){el('k3').innerHTML='<div class="sub" style="color:var(--red)">Could not load the data: '+e.message+' <button class="btn" id="retry">Retry</button></div>';el('retry').onclick=boot});
 }
-el('reset').onclick=function(){post('/v1/sessions/'+SID+'/reset',{}).then(function(){APPR={};LOG=[];el('log').innerHTML='<div>No approvals yet. Approve an option in the table below.</div>';IDSET=null;toast('Demo data reset');boot()}).catch(function(e){toast(e.message)})};
+el('reset').onclick=function(){post('/v1/sessions/'+SID+'/reset',{}).then(function(){APPR={};LOG=[];DRAFTS={};el('log').innerHTML='<div>No approvals yet. Approve an option in the table below.</div>';IDSET=null;toast('Demo data reset');boot()}).catch(function(e){toast(e.message)})};
 boot();setInterval(liveEvent,6000);
 </script>
 </body>
