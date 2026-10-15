@@ -208,7 +208,7 @@ details[open] .sumrow .car{transform:rotate(90deg)}
 <textarea id="nt" rows="4" placeholder="Paste a supplier or carrier delay notice, in any language"></textarea>
 <div style="margin-top:8px"><button class="btn v" id="nx">Extract with Gemini</button></div><div id="nr"></div></div>
 <div class="card mb"><h2>Needs action today</h2><div id="acts"></div></div>
-<div class="card mb"><h2><span class="live" id="livedot"></span>Live ETA feed<button class="regen" id="livebtn">Pause</button></h2><div class="feed" id="feed"></div><div class="chk">Simulated carrier events. Each one updates the expected date and the date history.</div></div>
+<div class="card mb"><h2><span class="live off" id="livedot"></span>Live ETA feed<button class="regen" id="livebtn">Start</button></h2><div class="feed" id="feed"></div><div class="chk">Simulated carrier events, off by default. Each event is saved to your session, so the dashboard and Gemini always see the same data.</div></div>
 <div class="card mb"><h2>ERP write-back log</h2><div class="feed" id="log"><div>No approvals yet. Approve an option in the table below.</div></div></div>
 </div>
 <div>
@@ -468,17 +468,22 @@ function advanceApproval(id){
  post('/v1/approvals/'+a.aid+'/advance',{}).then(function(res){a.state=res.state;LOG.unshift('<div><time>'+clock()+'</time><span><b>PO '+id+'</b> approval is now '+res.state+'.</span></div>');el('log').innerHTML=LOG.join('');drawTable()}).catch(function(e){toast(e.message)});
 }
 
-var FEED=[],livePaused=false;
+var FEED=[],livePaused=true,liveBusy=false;
+function isoD(n){return new Date(Date.UTC(2026,5,1+n)).toISOString().slice(0,10)}
 function liveEvent(){
- if(livePaused)return;
+ if(livePaused||liveBusy||!ROWS.length)return;
  var c=ROWS.filter(function(r){return r.risk!=='ok'&&!APPR[r.id]&&(cur==='all'||r.pl===cur)}),r=c[Math.floor(Math.random()*c.length)];
  if(!r)return;
  var inc=r.risk==='low'?1:ri(1,2);
  if(r.risk==='low'&&r.cover<r.edd+inc)return;
- var old=r.edd;r.delay+=inc;r.edd+=inc;r.gap=Math.max(0,r.edd-r.cover);r._api=null;r.hist.push({day:0,d:r.delay,src:'Carrier ETA'});
- FEED.unshift('<div><time>'+clock()+'</time><span><b>PO '+r.id+'</b> '+r.item+': expected date '+fd(old)+' to '+fd(r.edd)+', now '+dy(r.delay)+' late ('+r.g.split(',')[0].toLowerCase()+').</span></div>');
- FEED=FEED.slice(0,5);el('feed').innerHTML=FEED.join('');
- drawKpis(false);drawSev();drawEsc();drawTable();
+ liveBusy=true;
+ var old=r.edd;
+ post('/v1/sessions/'+SID+'/pos/'+r.id+'/eta',{newArrivalDate:isoD(r.edd+inc),reason:'keep',confidence:+r.conf||1,note:r.note||'',source:'Carrier ETA'}).then(function(row){
+  var k=ROWS.findIndex(function(x){return x.id===row.id});ROWS[k]=row;BYID[row.id]=row;
+  FEED.unshift('<div><time>'+clock()+'</time><span><b>PO '+row.id+'</b> '+row.item+': expected date '+fd(old)+' to '+fd(row.edd)+', now '+dy(row.delay)+' late ('+row.g.split(',')[0].toLowerCase()+').</span></div>');
+  FEED=FEED.slice(0,5);el('feed').innerHTML=FEED.join('');
+  drawKpis(false);drawSev();drawEsc();drawTable();
+ }).catch(function(){}).then(function(){liveBusy=false});
 }
 
 function drawAll(){drawTabs();drawKpis(true);brief();drawActs();drawGroups();drawSev();drawEsc();groupOptions();drawTable()}
@@ -516,7 +521,7 @@ function ask(q){
   cm().scrollTop=cm().scrollHeight;
  }).catch(function(e){CHAT.pop();w.innerHTML='<span style="color:var(--red)">'+e.message+'</span>';cm().scrollTop=cm().scrollHeight});
 }
-var SG=['Which POs risk a stockout in 14 days?','Which delays are escalating?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa'];
+var SG=['Which POs risk a stockout in 14 days?','What causes the most delays?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa'];
 function openChat(on){chatOn=on;el('chat').classList.toggle('on',on);el('fab').style.display=on?'none':'flex';
  if(on&&!cm().children.length){addMsg('g','Hi, I am your planner copilot. I read the delay data above and can draft messages. What do you want to check?');
   el('sg').innerHTML=SG.map(function(x){return '<button>'+x+'</button>'}).join('');
@@ -548,7 +553,7 @@ el('nx').onclick=function(){
   if(ok)el('ap').onclick=function(){out.innerHTML='<div class="sub" style="margin-top:8px">Saving to Firestore...</div>';applyExtraction(ex,t).then(function(){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--green)">Saved. Expected dates and risk were recalculated on the server.</div>'}).catch(function(e){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">'+e.message+'</div>'})};
  }).catch(function(e){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">Extraction failed: '+e.message+'</div>'});
 };
-FEED=['<div><time>--:--</time><span>Waiting for the next carrier event.</span></div>'];el('feed').innerHTML=FEED.join('');
+FEED=['<div><time>--:--</time><span>Press Start to simulate carrier ETA updates.</span></div>'];el('feed').innerHTML=FEED.join('');
 function boot(){
  ['k1','k2','k4'].forEach(function(id){el(id).innerHTML=''});
  el('k3').innerHTML='<div class="sub">Loading 5,000 POs from Firestore...</div>';
