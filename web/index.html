@@ -509,6 +509,8 @@ function md(t){
  });
  return out+(inList?'</ul>':'');
 }
+var TOOL_LABEL={list_at_risk:'Checked POs at risk',get_po:'Looked up a PO',group_delays:'Grouped delays by cause',get_recovery_options:'Calculated recovery options',delivery_kpis:'Read open-PO figures',ytd_performance:'Read year-to-date figures'};
+function toolChip(c){var a=c.args||{};return (TOOL_LABEL[c.name]||c.name)+(a.poId?' '+a.poId:'')+(a.planner?' ('+a.planner+')':'')}
 function ask(q){
  if(!q.trim())return;
  addMsg('u',q.replace(/</g,'&lt;'));
@@ -516,7 +518,7 @@ function ask(q){
  CHAT.push({role:'user',text:q});
  post('/v1/chat',{sid:SID,messages:CHAT.slice(-10)}).then(function(res){
   CHAT.push({role:'model',text:res.reply});
-  w.innerHTML=(res.toolCalls.length?tools(res.toolCalls.map(function(c){return c.name+'('+Object.keys(c.args||{}).map(function(k){return k+'='+c.args[k]}).join(', ')+')'})):'')+md(res.reply)+(res.poIds.length>1?'<div style="margin-top:6px"><button class="btn" data-ids="1">Show '+res.poIds.length+' POs in the table</button></div>':'');
+  w.innerHTML=(res.toolCalls.length?tools(res.toolCalls.map(toolChip)):'')+md(res.reply)+(res.poIds.length>1?'<div style="margin-top:6px"><button class="btn" data-ids="1">Show '+res.poIds.length+' POs in the table</button></div>':'');
   var b=w.querySelector('[data-ids]');if(b)b.onclick=function(){IDSET=new Set(res.poIds);el('fs').value='all';el('fr').value='all';el('fg').value='all';el('q').value='';page=0;el('det').open=true;drawTable();el('tcard').scrollIntoView({behavior:'smooth'})};
   cm().scrollTop=cm().scrollHeight;
  }).catch(function(e){CHAT.pop();w.innerHTML='<span style="color:var(--red)">'+e.message+'</span>';cm().scrollTop=cm().scrollHeight});
