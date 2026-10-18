@@ -4,35 +4,37 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vinkla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <script>try{var t=localStorage.getItem('vinkla_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>
-:root{--bg:#f4f5f7;--card:#fff;--soft:#f1f3f4;--ink:#202124;--mute:#5f6368;--line:#dadce0;
---blue:#1a73e8;--blue-t:#e8f0fe;--red:#d93025;--red-t:#fce8e6;--amber:#b06000;--amber-t:#fef3e0;--green:#188038;--green-t:#e6f4ea;--violet:#7b3fe4;--violet-t:#f1eafd}
+:root{--bg:#f4f5f7;--card:#fff;--soft:#f1f3f4;--ink:#1b1b1b;--mute:#5f6368;--line:#dadce0;
+--blue:#1a73e8;--blue-t:#e8f0fe;--red:#d93025;--red-t:#fce8e6;--amber:#b06000;--amber-t:#fef3e0;--green:#188038;--green-t:#e6f4ea;--violet:#1a73e8;--violet-t:#e8f0fe}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131416;--card:#1e1f22;--soft:#2a2b2f;--ink:#e8eaed;--mute:#9aa0a6;--line:#3c4043;
---blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#c4a5fb;--violet-t:#2c2245}}
+--blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#8ab4f8;--violet-t:#1c2b45}}
 :root[data-theme="dark"]{--bg:#131416;--card:#1e1f22;--soft:#2a2b2f;--ink:#e8eaed;--mute:#9aa0a6;--line:#3c4043;
---blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#c4a5fb;--violet-t:#2c2245}
+--blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#8ab4f8;--violet-t:#1c2b45}
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-variant-numeric:tabular-nums}
 .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 90px}
 header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .logo{width:34px;height:34px;border-radius:10px;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;font-weight:700}
 h1{font-size:18px;margin:0;font-weight:600}
 .sub{font-size:12px;color:var(--mute)}
 .pill{margin-left:auto;font-size:12px;color:var(--mute);padding:3px 0;cursor:default;user-select:none}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
 .mb{margin-bottom:16px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.fn{border-radius:16px;padding:14px 16px;border:1px solid var(--line);background:var(--card)}
+.fn{border-radius:10px;padding:14px 16px;border:1px solid var(--line);background:var(--card)}
 .fn .lb{font-size:12px;color:var(--mute)}
-.fn .nv{font-size:28px;font-weight:700;line-height:1.25}
+.fn .nv{font-size:28px;font-weight:600;line-height:1.25}
 .fn .nv small{font-size:13px;font-weight:500;color:var(--mute);margin-left:4px}
 .fn .bar{height:6px;border-radius:3px;background:var(--soft);margin-top:8px}
 .fn .bar i{display:block;height:6px;border-radius:3px;width:0;transition:width .9s cubic-bezier(.2,.8,.2,1)}
 .fn .ft{font-size:12px;color:var(--mute);margin-top:4px}
 .sec{font-size:12px;color:var(--mute);margin:18px 0 8px;display:flex;justify-content:space-between}
 .tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.pl{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:16px;cursor:pointer;font:inherit;color:inherit;text-align:left;transition:transform .12s,border-color .12s}
+.pl{display:flex;align-items:center;gap:12px;padding:12px 14px;background:var(--card);border:1px solid var(--line);border-radius:10px;cursor:pointer;font:inherit;color:inherit;text-align:left;transition:transform .12s,border-color .12s}
 .pl:hover{transform:translateY(-2px);border-color:var(--blue)}
 .pl.on{border:2px solid var(--blue);background:var(--blue-t);padding:11px 13px}
 .ring{width:44px;height:44px;flex:none}
@@ -40,10 +42,10 @@ h1{font-size:18px;margin:0;font-weight:600}
 .pl span{font-size:12px;color:var(--mute)}
 .cols{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:16px;align-items:start}
 .card h2{font-size:13px;font-weight:600;margin:0 0 10px;display:flex;align-items:center;gap:8px}
-.ai{border:1px solid var(--violet);background:linear-gradient(135deg,var(--violet-t),var(--card) 60%)}
+.ai{border:1px solid var(--line);background:var(--card)}
 .ai h2{color:var(--violet)}
 .spark{width:18px;height:18px;flex:none}
-.regen{margin-left:auto;font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:3px 10px;cursor:pointer}
+.regen{margin-left:auto;font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:3px 10px;cursor:pointer}
 .regen:hover{background:var(--soft)}
 .head{font-size:17px;font-weight:600;line-height:1.4;margin:0 0 10px}
 .pts{margin:0;padding:0;list-style:none}
@@ -70,7 +72,7 @@ h1{font-size:18px;margin:0;font-weight:600}
 .card textarea{width:100%;font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);resize:vertical}
 .tagv{margin-left:auto;font-size:11px;font-weight:600;color:var(--violet)}
 .btn.v{background:var(--violet);color:#fff;border-color:var(--violet)}
-.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 7px;border-radius:4px;white-space:nowrap}
 .chip.high,.chip.Major{background:var(--red-t);color:var(--red)}
 .chip.medium,.chip.Moderate{background:var(--amber-t);color:var(--amber)}
 .chip.low,.chip.Minor{background:var(--blue-t);color:var(--blue)}
@@ -134,7 +136,7 @@ details[open] .sumrow .car{transform:rotate(90deg)}
 .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--card);padding:10px 16px;border-radius:10px;font-size:13px;z-index:40;display:none}
 .fab{position:fixed;right:20px;bottom:20px;z-index:20;display:flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 18px;background:var(--violet);color:#fff;font:inherit;font-weight:600;cursor:pointer;box-shadow:0 6px 20px rgba(0,0,0,.25)}
 .fab svg{width:18px;height:18px}
-.chat{position:fixed;right:20px;bottom:20px;z-index:21;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100vh - 40px));display:none;flex-direction:column;background:var(--card);border:1px solid var(--violet);border-radius:18px;box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
+.chat{position:fixed;right:20px;bottom:20px;z-index:21;width:min(400px,calc(100vw - 32px));height:min(620px,calc(100vh - 40px));display:none;flex-direction:column;background:var(--card);border:1px solid var(--violet);border-radius:12px;box-shadow:0 12px 40px rgba(0,0,0,.3);overflow:hidden}
 .chat.on{display:flex}
 .ch{display:flex;align-items:center;gap:8px;padding:12px 14px;background:var(--violet-t);color:var(--violet);font-weight:600}
 .ch .x{margin-left:auto;border:0;background:transparent;color:inherit;font-size:20px;cursor:pointer;line-height:1}
@@ -150,19 +152,17 @@ details[open] .sumrow .car{transform:rotate(90deg)}
 .dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
 @keyframes bl{0%,60%,100%{opacity:.25}30%{opacity:1}}
 .sg{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 8px}
-.sg button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer}
+.sg button{font:inherit;font-size:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:6px;padding:4px 10px;cursor:pointer}
 .sg button:hover{background:var(--soft)}
 .cf{display:flex;gap:8px;padding:10px 14px;border-top:1px solid var(--line)}
 .cf input{flex:1;font:inherit;font-size:13px;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 .cn{font-size:11px;color:var(--mute);padding:0 14px 8px}
 .g3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.kc{border-radius:16px;padding:16px 18px;border:1px solid var(--line);background:var(--card)}
-.kc.red{background:var(--red-t);border-color:transparent}
-.kc.amber{background:var(--amber-t);border-color:transparent}
-.kc.blue{background:var(--blue-t);border-color:transparent}
+.kc{border-radius:10px;padding:16px 18px;border:1px solid var(--line);background:var(--card)}
+.kc.red,.kc.amber,.kc.blue{background:var(--card);border-color:var(--line)}
 .kc .lb{font-size:12px;font-weight:600;color:var(--mute)}
-.kc .nv{font-size:30px;font-weight:700;line-height:1.15;margin:4px 0}
+.kc .nv{font-size:30px;font-weight:600;line-height:1.15;margin:4px 0}
 .kc .nv.big{font-size:44px;line-height:1.05}
 .kc.red .nv.big{color:var(--red)}.kc.amber .nv.big{color:var(--amber)}.kc.blue .nv.big{color:var(--blue)}
 .kc .ks{font-size:13px}
@@ -418,7 +418,7 @@ function stepChart(r){
 }
 function detail(r){
  var o=r._api?r._api.opts:opts(r),a=APPR[r.id],onh=Math.floor(r.cover*r.demand*0.7),inb=r.cover*r.demand-onh;
- var A='<div class="b"><h3>Why it is late</h3>'+(r.note?'<div class="notice">'+r.note+'</div><div class="json">{ "reason": "'+r.g+'",<br>&nbsp;&nbsp;"new_eta": "'+fd(r.edd)+'",<br>&nbsp;&nbsp;"confidence": '+r.conf+' }</div><div class="sub" style="margin-top:6px">Gemini read the notice, and the rules engine re-checks the dates.</div>':'<div class="sub">No delay. Tracking matches the contract date.</div>')+'</div>';
+ var A='<div class="b"><h3>Why it is late</h3>'+(r.note?'<div class="notice">'+r.note.replace(/</g,'&lt;')+'</div>'+(r.extracted?'<div class="ev"><span>Cause</span><b>'+r.g+'</b></div><div class="ev"><span>New date</span><b>'+fd(r.edd)+'</b></div><div class="ev"><span>Confidence</span><b>'+r.conf+'</b></div><details style="margin-top:6px"><summary class="sub" style="cursor:pointer">Raw Gemini output</summary><div class="json" style="margin-top:4px">{ "reason": "'+r.g+'",<br>&nbsp;&nbsp;"new_eta": "'+fd(r.edd)+'",<br>&nbsp;&nbsp;"confidence": '+r.conf+' }</div></details><div class="sub" style="margin-top:6px">Extracted by Gemini. The rules engine re-checks the dates.</div>':'<div class="sub">Sample notice from the seeded data. Paste a notice in Notice intake to see a live Gemini extraction.</div>'):'<div class="sub">No delay. Tracking matches the contract date.</div>')+'</div>';
  var B='<div class="b"><h3>Delay dynamics</h3>'+(r.hist.length?stepChart(r)+r.hist.map(function(h){return '<div class="ev"><span>'+fd(h.day)+' ('+h.src+')</span><b>'+h.d+' d late</b></div>'}).join('')+'<div class="ev"><span>Contract date</span><b>'+fd(r.cdd)+'</b></div><div class="ev"><span>Expected now</span><b>'+fd(r.edd)+'</b></div>':'<div class="sub">No date changes recorded.</div>')+'</div>';
  var C='<div class="b"><h3>Stockout risk engine</h3><div class="ev"><span>On hand</span><b>'+num(onh)+' units</b></div><div class="ev"><span>Other inbound before expected date</span><b>'+num(inb)+' units</b></div><div class="ev"><span>Forecast demand</span><b>'+num(r.demand)+' / day</b></div><div class="ev"><span>Cover</span><b>'+dy(r.cover)+', ends '+fd(r.cover)+'</b></div><div class="ev"><span>Expected arrival</span><b>'+fd(r.edd)+'</b></div>'+(r.gap?'<div class="ev"><span style="color:var(--red)">Gap</span><b style="color:var(--red)">'+dy(r.gap)+', '+num(r.gap*r.demand)+' units short</b></div>':'<div class="ev"><span>Gap</span><b style="color:var(--green)">None, stock covers the delay</b></div>')+'</div>';
  var D;
