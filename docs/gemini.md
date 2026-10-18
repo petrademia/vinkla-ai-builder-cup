@@ -1,6 +1,6 @@
 # Gemini integration
 
-Model: `gemini-2.5-flash` on Vertex AI, called from Cloud Run with the `@google/genai` SDK. All calls use a 25 second timeout and retry on HTTP 429, 500, 503 and 504 with exponential backoff (`gemini/gemini.ts`).
+Model: `gemini-2.5-flash` on Vertex AI (renamed the Gemini Enterprise Agent Platform in 2026; the API name is unchanged), called from Cloud Run with the `@google/genai` SDK. All calls use a 25 second timeout and retry on HTTP 429, 500, 503 and 504 with exponential backoff (`gemini/gemini.ts`).
 
 ## 1. Notice extraction (structured output)
 
@@ -32,9 +32,22 @@ Gemini output is treated as untrusted. `validateExtraction` rejects or flags:
 
 The dashboard disables the Apply button while any check fails.
 
-## 2. Planner chat (function calling)
+## 2. Planner chat (Agent Development Kit)
 
-The chat model has no data of its own. It calls six tools that run inside the service and read the planner's data from Firestore (`gemini/chat.ts` in the private codebase, up to five tool steps per question).
+The chat is an agent built with Google's Agent Development Kit (ADK, `@google/adk`). The model has no data of its own. It calls six tools that run inside the service and read the planner's data from Firestore. If ADK fails for any reason, the service falls back to a direct function-calling loop with the same tools and the same instruction, and the response says which engine answered.
+
+A lesson from building it: ADK converts zod rules such as `positive()` into a JSON field, `exclusiveMinimum`, which Gemini's tool format rejects with HTTP 400. The agent therefore gives the model plain schemas, and each tool validates its arguments strictly when it runs. The agent setup, in short:
+
+```ts
+const agent = new LlmAgent({
+  name: "vinkla_planner_copilot",
+  model,
+  instruction: SYSTEM,
+  tools, // six FunctionTool objects with plain zod schemas
+  generateContentConfig: { temperature: 0.2, thinkingConfig: { thinkingBudget: 0 } },
+});
+const runner = new InMemoryRunner({ agent, appName: "vinkla" });
+```
 
 | Tool | What it returns |
 |---|---|
