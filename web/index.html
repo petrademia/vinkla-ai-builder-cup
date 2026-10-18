@@ -313,7 +313,7 @@ function drawKpis(anim){
  var sevbar='<div class="sevbar">'+Object.keys(c).map(function(n){return '<i style="width:'+(D.n?c[n]/D.n*100:0)+'%;background:'+cl[n]+'"></i>'}).join('')+'</div>';
  var sevlg='Minor '+c.Minor+' · Moderate '+c.Moderate+' · Major '+c.Major+' · Critical '+c.Critical;
  el('k1').innerHTML=
-  kc('red','Act today',H.n,'int',usd(H.v)+' at stake · '+qf(H.q)+' units','Stock ends within 3 days. These need a decision now.')+
+  kc('red','Act today',H.n,'int',usd(H.v)+' at stake · '+qf(H.q)+' units','Delayed POs whose stock ends within 3 days, before the new arrival.')+
   kc('amber','Stockout risk',R.n,'int',usd(R.v)+' at stake · '+qf(R.q)+' units','Delayed POs whose stock ends before the new arrival. Includes the '+H.n+' above.')+
   kc('blue','Risk of delayed open POs',D.n,'int',pc.toFixed(1)+'% of open POs · '+usd(D.v)+' · '+qf(D.q)+' units',sevlg,sevbar);
  el('k2').innerHTML=
@@ -353,7 +353,7 @@ function getJson(path){return fetch(API+path).then(function(res){return res.json
 function post(path,body){return fetch(API+path,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}).then(function(res){return res.json().then(function(j){if(!res.ok)throw new Error(typeof j.error==='string'?j.error:'HTTP '+res.status);return j})})}
 var KIND={micro:'micro_po',sto:'sto',cod:'cod',air:'air'},BACK={micro_po:'micro',sto:'sto',cod:'cod',air:'air'};
 function cands(r){return[{kind:'micro_po',label:'Micro-PO to '+r.sup,leadDays:2+r.id%3,unitCost:r.unit*1.15,fixedCost:0,kgCo2ePerUnit:0.02*OT.micro},{kind:'sto',label:'Stock transfer (STO), Plant '+(1+r.id%3),leadDays:3+r.id%3,unitCost:r.unit*1.05,fixedCost:150,kgCo2ePerUnit:0.02*OT.sto},{kind:'cod',label:'Change of destination (COD)',leadDays:2+r.id%2,unitCost:r.unit*0.95,fixedCost:80,kgCo2ePerUnit:0.02*OT.cod},{kind:'air',label:'Air freight',leadDays:2,unitCost:r.unit*2.8,fixedCost:400,kgCo2ePerUnit:0.02*OT.air}]}
-function assessApi(r){return post('/v1/assess',{onHand:r.cover*r.demand,dailyDemand:r.demand,inbound:[],arrivalDay:r.edd+1,candidates:cands(r)}).then(function(res){r._api={shortage:res.assessment,opts:res.options.map(function(x){return{t:BACK[x.kind],n:x.label,d:x.leadDays,c:x.totalCost,e:Math.round(x.co2eKg),fit:x.beforeStockout,rank:x.rank}})};return r._api})}
+function assessApi(r){return post('/v1/sessions/'+SID+'/pos/'+r.id+'/options',{}).then(function(res){r._api={shortage:res.assessment,opts:res.options.map(function(x){return{t:BACK[x.kind],n:x.label,d:x.leadDays,c:x.totalCost,e:Math.round(x.co2eKg),fit:x.beforeStockout,rank:x.rank,detail:x.detail,covers:x.coversShortage}})};return r._api})}
 function best(r){return(r._api?r._api.opts:opts(r))[0]}
 function opts(r){
  if(!r.gap)return[];
@@ -366,6 +366,7 @@ function opts(r){
 function why(r,o){
  var a=o[0],air=o.filter(function(x){return x.t==='air'})[0],u=r.gap*r.demand;
  if(a.fit){var s='<b>Rank 1: '+a.n+'.</b> It arrives in '+dy(a.d)+', before stock ends in '+dy(r.cover)+', at $'+num(Math.round(a.c))+' for '+num(u)+' units.';
+  if(a.detail)s+=' Source: '+a.detail+'.';
   if(a.t!=='air')s+=' Air freight would cost '+(air.c/a.c).toFixed(1)+' times more and emit '+(air.e/Math.max(1,a.e)).toFixed(1)+' times more CO2e.';
   return s+' The rules engine ranks the options by lowest cost among those that arrive before stock ends.'}
  return '<b>No option arrives before stock ends in '+dy(r.cover)+'.</b> Fastest is '+a.n+' in '+dy(a.d)+', so a short stoppage of about '+dy(a.d-r.cover)+' remains. Consider partial allocation to the most critical line while it ships.';
@@ -424,7 +425,7 @@ function detail(r){
  var D;
  if(!o.length)D='<div class="b"><h3>Recovery options</h3><div class="sub">No shortfall, so no recovery action is needed. The engine keeps watching.</div></div>';
  else{
-  D='<div class="b"><h3><span style="color:var(--violet)">Gemini decision copilot</span></h3><p class="why">'+why(r,o)+'</p><table class="ot"><thead><tr><th></th><th>Option</th><th>Arrives</th><th>Cost</th><th>CO2e</th><th>Before stock ends</th></tr></thead><tbody>'+o.map(function(x){return '<tr class="'+(x.rank===1?'rec':'')+'"><td><span class="rk">'+x.rank+'</span></td><td>'+x.n+'</td><td>'+dy(x.d)+'</td><td>$'+num(Math.round(x.c))+'</td><td>'+num(x.e)+' kg</td><td>'+(x.fit?'Yes':'No')+'</td></tr>'}).join('')+'</tbody></table><div class="sub" style="margin-top:4px">'+(r._api?'Computed by the Vinkla API (rules engine on Cloud Run). ':'Local estimate. ')+'Illustrative costs and emission factors.</div>';
+  D='<div class="b"><h3><span style="color:var(--violet)">Recommendation</span></h3><p class="why">'+why(r,o)+'</p><table class="ot"><thead><tr><th></th><th>Option</th><th>Arrives</th><th>Cost</th><th>CO2e</th><th>Before stock ends</th></tr></thead><tbody>'+o.map(function(x){return '<tr class="'+(x.rank===1?'rec':'')+'"><td><span class="rk">'+x.rank+'</span></td><td>'+x.n+(x.detail?'<div class="sub" style="white-space:normal;max-width:420px">'+x.detail+'</div>':'')+(x.covers===false?'<div class="sub" style="color:var(--red);white-space:normal">Covers only part of the shortage</div>':'')+'</td><td>'+dy(x.d)+'</td><td>$'+num(Math.round(x.c))+'</td><td>'+num(x.e)+' kg</td><td>'+(x.fit?'Yes':'No')+'</td></tr>'}).join('')+'</tbody></table><div class="sub" style="margin-top:4px">'+(r._api?'Computed by the Vinkla API (rules engine on Cloud Run). ':'Local estimate. ')+'Illustrative costs and emission factors.'+(o.some(function(x){return x.detail})?' A donor site keeps at least 7 days of cover, which is an assumption.':'')+'</div>';
   if(a)D+='<div class="okbox" style="margin-top:10px">'+a.n+' is '+a.state+'. Approval '+a.aid+' is saved in Firestore ('+a.t+'). '+(a.state==='confirmed'?'':'<button class="btn" data-adv="'+r.id+'">Mark as '+({approved:'submitted',submitted:'confirmed'}[a.state])+'</button>')+'</div>';
   else D+='<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px"><button class="btn v" data-draft="'+r.id+'">Draft supplier message</button><select data-lang="'+r.id+'" class="btn">'+[['en','English'],['id','Bahasa Indonesia'],['ja','Japanese']].map(function(l){return '<option value="'+l[0]+'"'+((DLANG[r.id]||'en')===l[0]?' selected':'')+'>'+l[1]+'</option>'}).join('')+'</select><button class="btn p" data-ap="'+r.id+'">Approve and write to ERP</button></div><div id="dr'+r.id+'">'+(DRAFTS[r.id]||'')+'</div>';
   D+='</div>';
@@ -461,7 +462,7 @@ function drawTable(){
 function toast(t){var e=el('toast');e.textContent=t;e.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(function(){e.style.display='none'},2800)}
 function approve(id){
  var r=BYID[id],a=best(r);
- post('/v1/approvals',{poId:String(id),optionKind:KIND[a.t],optionLabel:a.n,totalCost:Math.round(a.c),co2eKg:a.e,approvedBy:'planner'}).then(function(res){
+ post('/v1/approvals',{sid:SID,poId:String(id),optionKind:KIND[a.t],optionLabel:a.n,totalCost:Math.round(a.c),co2eKg:a.e,approvedBy:'planner'}).then(function(res){
   APPR[id]={n:a.n,aid:res.id,state:res.state,t:clock()};
   LOG.unshift('<div><time>'+clock()+'</time><span><b>PO '+id+'</b> '+a.n+' approved. Firestore approval '+res.id+'.</span></div>');
   el('log').innerHTML=LOG.join('');toast('Approval saved: '+res.id);drawActs();drawTable();
