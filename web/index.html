@@ -4,11 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vinkla</title>
+<script>try{var t=localStorage.getItem('vinkla_theme');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <style>
 :root{--bg:#f4f5f7;--card:#fff;--soft:#f1f3f4;--ink:#202124;--mute:#5f6368;--line:#dadce0;
 --blue:#1a73e8;--blue-t:#e8f0fe;--red:#d93025;--red-t:#fce8e6;--amber:#b06000;--amber-t:#fef3e0;--green:#188038;--green-t:#e6f4ea;--violet:#7b3fe4;--violet-t:#f1eafd}
-@media (prefers-color-scheme:dark){:root{--bg:#131416;--card:#1e1f22;--soft:#2a2b2f;--ink:#e8eaed;--mute:#9aa0a6;--line:#3c4043;
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#131416;--card:#1e1f22;--soft:#2a2b2f;--ink:#e8eaed;--mute:#9aa0a6;--line:#3c4043;
 --blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#c4a5fb;--violet-t:#2c2245}}
+:root[data-theme="dark"]{--bg:#131416;--card:#1e1f22;--soft:#2a2b2f;--ink:#e8eaed;--mute:#9aa0a6;--line:#3c4043;
+--blue:#8ab4f8;--blue-t:#1c2b45;--red:#f28b82;--red-t:#3d2220;--amber:#fdd663;--amber-t:#3a2f12;--green:#81c995;--green-t:#1d3325;--violet:#c4a5fb;--violet-t:#2c2245}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
 .wrap{max-width:1180px;margin:0 auto;padding:20px 16px 90px}
@@ -16,7 +19,7 @@ header{display:flex;align-items:center;gap:12px;margin-bottom:18px}
 .logo{width:34px;height:34px;border-radius:10px;background:var(--ink);color:var(--card);display:flex;align-items:center;justify-content:center;font-weight:700}
 h1{font-size:18px;margin:0;font-weight:600}
 .sub{font-size:12px;color:var(--mute)}
-.pill{margin-left:auto;font-size:12px;color:var(--mute);border:1px solid var(--line);border-radius:999px;padding:3px 10px;background:var(--card)}
+.pill{margin-left:auto;font-size:12px;color:var(--mute);padding:3px 0;cursor:default;user-select:none}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px 18px}
 .mb{margin-bottom:16px}
 .g4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -175,13 +178,14 @@ details[open] .sumrow .car{transform:rotate(90deg)}
 .kt th:first-child,.kt td:first-child{text-align:left}
 .kt td{text-align:right;padding:8px;border-bottom:1px solid var(--line);white-space:nowrap}
 .kt tr:last-child td{border-bottom:0;font-weight:600}
-@media (prefers-color-scheme:dark){.btn.v,.fab{color:#1e1f22}}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .btn.v,:root:not([data-theme="light"]) .fab{color:#1e1f22}}
+:root[data-theme="dark"] .btn.v,:root[data-theme="dark"] .fab{color:#1e1f22}
 @media (max-width:900px){.g4,.tabs{grid-template-columns:repeat(2,minmax(0,1fr))}.g3,.g2{grid-template-columns:1fr}.cols{grid-template-columns:1fr}.dg{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 <div class="wrap">
-<header><div class="logo">V</div><div><h1>Vinkla</h1><div class="sub">Delay workbench. Inbound purchase orders, 1 Jun 2026</div></div><span class="pill">Synthetic data</span><button class="btn" id="reset">Reset demo data</button></header>
+<header><div class="logo">V</div><div><h1>Vinkla</h1><div class="sub">Delay workbench. Inbound purchase orders, 1 Jun 2026</div></div><span class="pill">Synthetic data</span><button class="btn" id="theme" aria-label="Switch between light and dark theme">Theme</button><button class="btn" id="reset">Reset demo data</button></header>
 
 <div class="sec"><span>View by planner queue</span><span>Click a queue to filter every number and table below</span></div>
 <div class="tabs" id="tabs"></div>
@@ -564,6 +568,10 @@ function boot(){
   drawAll();
  }).catch(function(e){el('k3').innerHTML='<div class="sub" style="color:var(--red)">Could not load the data: '+e.message+' <button class="btn" id="retry">Retry</button></div>';el('retry').onclick=boot});
 }
+function effTheme(){var t=document.documentElement.getAttribute('data-theme');return t||(window.matchMedia&&matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light')}
+function themeLabel(){el('theme').textContent=effTheme()==='dark'?'Light mode':'Dark mode'}
+el('theme').onclick=function(){var n=effTheme()==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',n);try{localStorage.setItem('vinkla_theme',n)}catch(e){}themeLabel()};
+themeLabel();
 el('reset').onclick=function(){post('/v1/sessions/'+SID+'/reset',{}).then(function(){APPR={};LOG=[];DRAFTS={};el('log').innerHTML='<div>No approvals yet. Approve an option in the table below.</div>';IDSET=null;toast('Demo data reset');boot()}).catch(function(e){toast(e.message)})};
 boot();setInterval(liveEvent,6000);
 </script>
