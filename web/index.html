@@ -539,7 +539,7 @@ function ask(q){
   cm().scrollTop=cm().scrollHeight;
  }).catch(function(e){CHAT.pop();w.innerHTML='<span style="color:var(--red)">'+e.message+'</span>';cm().scrollTop=cm().scrollHeight});
 }
-var SG=['Which POs risk a stockout in 14 days?','What causes the most delays?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa Indonesia'];
+var SG=['Which POs risk a stockout?','What causes the most delays?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa Indonesia'];
 function openChat(on){chatOn=on;el('chat').classList.toggle('on',on);el('fab').style.display=on?'none':'flex';
  if(on&&!cm().children.length){addMsg('g','Hi, I am your planner copilot. I read the delay data above and can draft messages. What do you want to check?');
   el('sg').innerHTML=SG.map(function(x){return '<button>'+x+'</button>'}).join('');
