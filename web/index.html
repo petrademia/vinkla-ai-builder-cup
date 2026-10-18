@@ -207,9 +207,10 @@ details[open] .sumrow .car{transform:rotate(90deg)}
 <ul class="pts" id="pts"></ul>
 <div class="chk">Counts come from the rules engine and are checked before this text is shown.</div>
 </div>
-<div class="card mb" id="intake"><h2>Notice intake<span class="tagv">Live Gemini</span></h2>
+<div class="card mb" id="intake"><h2>Incoming supplier notice<span class="tagv">Live Gemini</span></h2>
+<div class="sub" style="margin-bottom:4px">In this demo the notices are simulated. In production they would arrive from a shared mailbox.</div>
 <div class="sub" id="ntfor" style="margin-bottom:8px"></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" data-sample="0">English sample</button><button class="btn" data-sample="1">Bahasa Indonesia sample</button><button class="btn" data-sample="2">Japanese sample</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" data-sample="0">Simulate email: English</button><button class="btn" data-sample="1">Simulate email: Bahasa Indonesia</button><button class="btn" data-sample="2">Simulate email: Japanese</button></div>
 <textarea id="nt" rows="4" placeholder="Paste a supplier or carrier delay notice, in any language"></textarea>
 <div style="margin-top:8px"><button class="btn v" id="nx">Extract with Gemini</button></div><div id="nr"></div></div>
 <div class="card mb"><h2>Needs action today</h2><div id="acts"></div></div>
@@ -550,9 +551,9 @@ el('cf').onsubmit=function(e){e.preventDefault();var i=el('ci');ask(i.value);i.v
 var GROUP={port_congestion:'Port congestion',weather:'Weather',vessel_schedule:'Vessel schedule',customs:'Customs hold',supplier_production:'Supplier production slip',documentation:'Documentation',labour_action:'Labour action',transport_capacity:'Trucking shortage',other:'Other'};
 var MID=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
 var FOCUS_PO=null;
-function setFocusPo(id){FOCUS_PO=id;var r=BYID[id];el('ntfor').innerHTML=r?'Samples target <b>PO '+id+' ('+r.item+')</b>.':''}
+function setFocusPo(id){FOCUS_PO=id;var r=BYID[id];el('ntfor').innerHTML=r?'Simulated emails target <b>PO '+id+' ('+r.item+')</b>.':''}
 function gotoIntake(id){
- setFocusPo(id);el('nr').innerHTML='';el('nt').value='';el('nt').placeholder='Paste a delay notice for PO '+id+', or pick a sample';
+ setFocusPo(id);el('nr').innerHTML='';el('nt').value='';el('nt').placeholder='Paste a delay notice for PO '+id+', or simulate an email';
  el('intake').scrollIntoView({behavior:'smooth',block:'start'});setTimeout(function(){el('nt').focus({preventScroll:true})},500);
 }
 function sampleNotice(i){
@@ -568,7 +569,7 @@ function applyExtraction(ex,notice){
 document.querySelectorAll('[data-sample]').forEach(function(b){b.onclick=function(){el('nt').value=sampleNotice(+b.getAttribute('data-sample'))}});
 el('nx').onclick=function(){
  var t=el('nt').value.trim(),out=el('nr');
- if(!t){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">Paste a notice or pick a sample first.</div>';return}
+ if(!t){out.innerHTML='<div class="sub" style="margin-top:8px;color:var(--red)">Paste a notice or simulate an email first.</div>';return}
  out.innerHTML='<div class="sub" style="margin-top:8px">Asking Gemini...</div>';
  post('/v1/notices/extract',{notice:t,referenceDate:'2026-06-01',knownPoIds:ROWS.map(function(r){return String(r.id)})}).then(function(ex){
   var ok=!ex.issues.length&&ex.items.length&&ex.items.every(function(i){return i.newArrivalDate});
