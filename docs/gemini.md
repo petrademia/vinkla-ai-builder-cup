@@ -1,6 +1,6 @@
 # Gemini integration
 
-Model: `gemini-2.5-flash` on Vertex AI (renamed the Gemini Enterprise Agent Platform in 2026; the API name is unchanged), called from Cloud Run with the `@google/genai` SDK. All calls use a 25 second timeout and retry on HTTP 429, 500, 503 and 504 with exponential backoff (`gemini/gemini.ts`).
+Model: `gemini-2.5-flash` on the Gemini Enterprise Agent Platform (formerly Vertex AI; the API name `aiplatform.googleapis.com` is unchanged), called from Cloud Run with the `@google/genai` SDK. All calls use a 25 second timeout and retry on HTTP 429, 500, 503 and 504 with exponential backoff (`gemini/gemini.ts`).
 
 ## 1. Notice extraction (structured output)
 
