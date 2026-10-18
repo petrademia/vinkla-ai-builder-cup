@@ -299,7 +299,7 @@ function countUp(root,anim){root.querySelectorAll('.nv').forEach(function(e){var
  function st(t){if(!t0)t0=t;var p=Math.min(1,(t-t0)/700);e.textContent=f(v*p);if(p<1)requestAnimationFrame(st)}requestAnimationFrame(st)})}
 function growBars(root){setTimeout(function(){root.querySelectorAll('[data-w]').forEach(function(e){e.style.width=e.getAttribute('data-w')+'%'})},40)}
 function agg(rows){var o={n:0,q:0,v:0};rows.forEach(function(r){o.n++;o.q+=r.qty;o.v+=r.qty*r.unit});return o}
-function apprLine(n,total){return '<div class="ks" style="margin-top:2px">'+(n?'<b>'+n+' with an approved action</b> · '+(total-n)+' still open':'No approved action yet')+'</div>'}
+function apprLine(n){return '<div class="ks" style="margin-top:2px">'+(n?'<b>'+n+' covered by an approved recovery</b>, already removed from this count':'No approved recovery yet')+'</div>'}
 function kc(cls,lab,v,f,sub,foot,extra){return '<div class="kc '+cls+'"><div class="lb">'+lab+'</div><div class="nv'+(cls?' big':'')+'" data-v="'+v+'" data-f="'+f+'">0</div><div class="ks">'+sub+'</div>'+(extra||'')+'<div class="ft">'+foot+'</div></div>'}
 function spark(a,col){var W=200,H=46,mn=Math.min.apply(null,a),mx=Math.max.apply(null,a),sp=(mx-mn)||1,pts=a.map(function(v,i){return[8+i*((W-16)/(a.length-1)),H-8-((v-mn)/sp)*(H-18)]});
  return '<svg viewBox="0 0 '+W+' '+(H+14)+'" width="100%" role="img" aria-label="Monthly trend"><path d="M'+pts.map(function(p){return p[0]+' '+p[1]}).join(' L')+'" fill="none" stroke="'+col+'" stroke-width="2"/>'+pts.map(function(p,i){return '<circle cx="'+p[0]+'" cy="'+p[1]+'" r="'+(i===a.length-1?4:2.5)+'" fill="'+col+'"/><text x="'+p[0]+'" y="'+(H+10)+'" font-size="9" text-anchor="middle" fill="var(--mute)">'+MON[i]+'</text>'}).join('')+'</svg>'}
@@ -309,14 +309,14 @@ function ytdCard(lab,key,f,goodUp,unit){
 function drawKpis(anim){
  var d=sel(),del=d.filter(isDel),ont=d.filter(function(r){return !isDel(r)}),T=agg(d),D=agg(del),O=agg(ont),
   R=agg(del.filter(function(r){return r.risk==='high'||r.risk==='medium'})),H=agg(del.filter(function(r){return r.risk==='high'})),
-  c={Minor:0,Moderate:0,Major:0,Critical:0},pc=T.n?D.n/T.n*100:0,Ha=del.filter(function(r){return r.risk==='high'&&APPR[r.id]}).length,Ra=del.filter(function(r){return(r.risk==='high'||r.risk==='medium')&&APPR[r.id]}).length;
+  c={Minor:0,Moderate:0,Major:0,Critical:0},pc=T.n?D.n/T.n*100:0,Rc=d.filter(function(r){return r.recovery&&r.recovery.covered}).length;
  del.forEach(function(r){c[sev(r.delay)]++});
  var cl={Minor:'var(--blue)',Moderate:'var(--amber)',Major:'var(--red)',Critical:'#7a1410'};
  var sevbar='<div class="sevbar">'+Object.keys(c).map(function(n){return '<i style="width:'+(D.n?c[n]/D.n*100:0)+'%;background:'+cl[n]+'"></i>'}).join('')+'</div>';
  var sevlg='Minor '+c.Minor+' · Moderate '+c.Moderate+' · Major '+c.Major+' · Critical '+c.Critical;
  el('k1').innerHTML=
-  kc('red','Act today',H.n,'int',usd(H.v)+' at stake · '+qf(H.q)+' units','Delayed POs whose stock ends within 3 days, before the new arrival.',apprLine(Ha,H.n))+
-  kc('amber','Stockout risk',R.n,'int',usd(R.v)+' at stake · '+qf(R.q)+' units','Delayed POs whose stock ends before the new arrival. Includes the '+H.n+' above.',apprLine(Ra,R.n))+
+  kc('red','Act today',H.n,'int',usd(H.v)+' at stake · '+qf(H.q)+' units','Delayed POs whose stock ends within 3 days, before the new arrival.',apprLine(Rc))+
+  kc('amber','Stockout risk',R.n,'int',usd(R.v)+' at stake · '+qf(R.q)+' units','Delayed POs whose stock ends before the new arrival. Includes the '+H.n+' above.',apprLine(Rc))+
   kc('blue','Risk of delayed open POs',D.n,'int',pc.toFixed(1)+'% of open POs · '+usd(D.v)+' · '+qf(D.q)+' units',sevlg,sevbar);
  el('k2').innerHTML=
   kc('','Open POs',T.n,'int','On time '+num(O.n)+' · delayed '+num(D.n),'Purchase orders not yet received.')+
@@ -425,7 +425,8 @@ function detail(r){
  var B='<div class="b"><h3>Delay dynamics</h3>'+(r.hist.length?stepChart(r)+'<div class="sub" style="margin:2px 0 6px">Days after the contract date at each estimate</div>'+r.hist.map(function(h){return '<div class="ev"><span>'+fd(h.day)+', '+h.src+'</span><b>arrives '+fd(r.cdd+h.d)+' (+'+h.d+' d)</b></div>'}).join('')+'<div class="ev"><span>Contract date</span><b>'+fd(r.cdd)+'</b></div><div class="ev"><span>Expected now</span><b>'+fd(r.edd)+'</b></div>':'<div class="sub">No date changes recorded.</div>')+'</div>';
  var C='<div class="b"><h3>Stockout risk engine</h3><div class="ev"><span>On hand</span><b>'+num(onh)+' units</b></div><div class="ev"><span>Other inbound before expected date</span><b>'+num(inb)+' units</b></div><div class="ev"><span>Forecast demand</span><b>'+num(r.demand)+' / day</b></div><div class="ev"><span>Cover</span><b>'+dy(r.cover)+', ends '+fd(r.cover)+'</b></div><div class="ev"><span>Expected arrival</span><b>'+fd(r.edd)+'</b></div>'+(r.gap?'<div class="ev"><span style="color:var(--red)">Gap</span><b style="color:var(--red)">'+dy(r.gap)+', '+num(r.gap*r.demand)+' units short</b></div>':'<div class="ev"><span>Gap</span><b style="color:var(--green)">None, stock covers the delay</b></div>')+'</div>';
  var D;
- if(!o.length)D='<div class="b"><h3>Recovery options</h3><div class="sub">No shortfall, so no recovery action is needed. The engine keeps watching.</div></div>';
+ if(r.recovery)D='<div class="b"><h3>Recovery</h3><div class="okbox">'+r.recovery.option+': '+num(r.recovery.units)+' units, available '+fd(r.recovery.arrivalDay-1)+'. '+(r.recovery.covered?'This closes the shortage of '+dy(r.recovery.gapBefore)+'.':'Still '+num(r.recovery.remainingUnits)+' units short, for '+dy(r.gap)+'.')+' State: '+(a?a.state:r.recovery.state)+'. Approval '+(a?a.aid:'')+' is saved in Firestore.'+(a&&a.state!=='confirmed'?' <button class="btn" data-adv="'+r.id+'">Mark as '+({approved:'submitted',submitted:'confirmed'}[a.state])+'</button>':'')+'</div></div>';
+ else if(!o.length)D='<div class="b"><h3>Recovery options</h3><div class="sub">'+(r.gave?'This PO gave '+r.gave.map(function(g){return num(g.units)+' units to PO '+g.toPoId}).join(', ')+', so its shipment is smaller now.':'No shortfall, so no recovery action is needed. The engine keeps watching.')+'</div></div>';
  else{
   D='<div class="b"><h3><span style="color:var(--violet)">Recommendation</span></h3><p class="why">'+why(r,o)+'</p><table class="ot"><thead><tr><th></th><th>Option</th><th>Arrives</th><th>Cost</th><th>CO2e</th><th>Before stock ends</th></tr></thead><tbody>'+o.map(function(x){return '<tr class="'+(x.rank===1?'rec':'')+'"><td><span class="rk">'+x.rank+'</span></td><td>'+x.n+(x.detail?'<div class="sub" style="white-space:normal;max-width:420px">'+x.detail+'</div>':'')+(x.covers===false?'<div class="sub" style="color:var(--red);white-space:normal">Covers only part of the shortage</div>':'')+'</td><td>'+dy(x.d)+'</td><td>$'+num(Math.round(x.c))+'</td><td>'+num(x.e)+' kg</td><td>'+(x.fit?'Yes':'No')+'</td></tr>'}).join('')+'</tbody></table><div class="sub" style="margin-top:4px">'+(r._api?'Computed by the Vinkla API (rules engine on Cloud Run). ':'Local estimate. ')+'Illustrative costs and emission factors.'+(o.some(function(x){return x.detail})?' A donor site keeps at least 7 days of cover, which is an assumption.':'')+'</div>';
   if(a)D+='<div class="okbox" style="margin-top:10px">'+a.n+' is '+a.state+'. Approval '+a.aid+' is saved in Firestore ('+a.t+'). '+(a.state==='confirmed'?'':'<button class="btn" data-adv="'+r.id+'">Mark as '+({approved:'submitted',submitted:'confirmed'}[a.state])+'</button>')+'</div>';
@@ -447,7 +448,7 @@ function drawTable(){
  var pages=Math.max(1,Math.ceil(d.length/PS));if(page>=pages)page=pages-1;
  var s=d.slice(page*PS,page*PS+PS);
  el('tbody').innerHTML=s.map(function(r){var o=open[r.id],e=eff(r);
-  return '<tr class="r'+(o?' open':'')+'" data-id="'+r.id+'"><td><span class="car">&#9656;</span></td><td><b>'+r.id+'</b></td><td>'+r.item+'</td><td>'+r.sup+'</td><td>'+PL[r.pl].name+'</td><td>'+r.g+'</td><td>'+fd(r.cdd)+'</td><td>'+fd(r.edd)+'</td><td>'+(r.delay?'+'+r.delay+' d':'-')+'</td><td>'+(r.delay?'<span class="chip '+sev(r.delay)+'">'+sev(r.delay)+'</span>':'-')+'</td><td>'+r.cover+' d</td><td><span class="chip '+e+'">'+LBL[e]+'</span></td></tr>'+(o?'<tr class="det"><td colspan="12">'+detail(r)+'</td></tr>':'')}).join('')||'<tr><td colspan="12" style="padding:24px;text-align:center;color:var(--mute)">No POs match these filters.</td></tr>';
+  return '<tr class="r'+(o?' open':'')+'" data-id="'+r.id+'"><td><span class="car">&#9656;</span></td><td><b>'+r.id+'</b></td><td>'+r.item+'</td><td>'+r.sup+'</td><td>'+PL[r.pl].name+'</td><td>'+r.g+'</td><td>'+fd(r.cdd)+'</td><td>'+fd(r.edd)+'</td><td>'+(r.delay?'+'+r.delay+' d':'-')+'</td><td>'+(r.delay?'<span class="chip '+sev(r.delay)+'">'+sev(r.delay)+'</span>':'-')+'</td><td>'+r.cover+' d</td><td><span class="chip '+e+'">'+(r.recovery&&e!=='ok'?(r.recovery.covered?'Recovery planned':'Recovery partial'):LBL[e])+'</span></td></tr>'+(o?'<tr class="det"><td colspan="12">'+detail(r)+'</td></tr>':'')}).join('')||'<tr><td colspan="12" style="padding:24px;text-align:center;color:var(--mute)">No POs match these filters.</td></tr>';
  document.querySelectorAll('#tbody tr.r').forEach(function(t){t.onclick=function(){var id=+t.getAttribute('data-id');open[id]=!open[id];if(open[id])setFocusPo(id);drawTable()}});
  document.querySelectorAll('[data-lang]').forEach(function(b){b.onchange=function(){DLANG[+b.getAttribute('data-lang')]=b.value}});
  document.querySelectorAll('[data-draft]').forEach(function(b){b.onclick=function(){var id=+b.getAttribute('data-draft'),lg=document.querySelector('[data-lang="'+id+'"]').value,box=el('dr'+id),name={en:'English',id:'Bahasa Indonesia',ja:'Japanese'}[lg];DLANG[id]=lg;DRAFTS[id]='<div class="sub" style="margin-top:8px">Gemini is drafting...</div>';box.innerHTML=DRAFTS[id];post('/v1/chat',{sid:SID,messages:[{role:'user',text:'Draft a supplier message in '+name+' for PO '+id+'.'}]}).then(function(res){DRAFTS[id]='<div class="dr">'+md(res.reply)+'</div><div class="sub">Gemini drafted this from live data. Nothing is sent until you approve.</div>'}).catch(function(e){DRAFTS[id]='<div class="sub" style="color:var(--red)">'+e.message+'</div>'}).then(function(){var b2=el('dr'+id);if(b2)b2.innerHTML=DRAFTS[id]})}});
@@ -463,12 +464,18 @@ function drawTable(){
  window._page=s;
 }
 function toast(t){var e=el('toast');e.textContent=t;e.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(function(){e.style.display='none'},2800)}
+function refreshData(){
+ return getJson('/v1/dataset?sid='+SID).then(function(d){
+  ROWS=d.rows;BYID={};ROWS.forEach(function(r){BYID[r.id]=r});
+  return getJson('/v1/approvals?sid='+SID).catch(function(){return[]});
+ }).then(function(list){APPR={};list.forEach(function(a){APPR[+a.poId]={n:a.optionLabel,aid:a.id,state:a.state,t:''}});drawAll()});
+}
 function approve(id){
- var r=BYID[id],a=best(r);
- post('/v1/approvals',{sid:SID,poId:String(id),optionKind:KIND[a.t],optionLabel:a.n,totalCost:Math.round(a.c),co2eKg:a.e,approvedBy:'planner'}).then(function(res){
-  APPR[id]={n:a.n,aid:res.id,state:res.state,t:clock()};
+ var r=BYID[id],a=best(r),before={h:stats('all').h,r:stats('all').r};
+ post('/v1/approvals',{sid:SID,poId:String(id),optionKind:KIND[a.t],approvedBy:'planner'}).then(function(res){
   LOG.unshift('<div><time>'+clock()+'</time><span><b>PO '+id+'</b> '+a.n+' approved. Firestore approval '+res.id+'.</span></div>');
-  el('log').innerHTML=LOG.join('');toast('Approval saved: '+res.id);drawKpis(false);drawActs();drawTable();
+  el('log').innerHTML=LOG.join('');
+  return refreshData().then(function(){var now=stats('all');toast('Approved. Act today '+before.h+' to '+now.h+', stockout risk '+before.r+' to '+now.r+'.')});
  }).catch(function(e){toast('Approval failed: '+e.message)});
 }
 function advanceApproval(id){

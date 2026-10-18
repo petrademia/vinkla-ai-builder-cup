@@ -7,7 +7,7 @@ Client access is denied by `deploy/firestore.rules`. Only the Cloud Run service,
 | `dataset` | `meta` | `chunks`, `count`, `seededAt` |
 | `dataset` | `chunk-0` to `chunk-9` | `rows[]`: 500 synthetic open POs per document. Chunking keeps each document under the 1 MiB limit and a full load to 10 reads. |
 | `sessions` | `{sid}` | `changes`: map of PO id to the changed PO row, and `updatedAt`. Each browser has its own session, so one judge's edits never change another's view. Capped at 300 changed POs. |
-| `approvals` | `{id}` | `poId`, `optionKind`, `optionLabel`, `totalCost`, `co2eKg`, `approvedBy`, `sid`, `state`, `history[]`, `createdAt` |
+| `approvals` | `{id}` | `poId`, `optionKind`, `optionLabel`, `units`, `arrivalDay`, `donors[]` (for redirects), `totalCost`, `co2eKg`, `approvedBy`, `sid`, `state`, `history[]`, `createdAt` |
 
 Approval states:
 

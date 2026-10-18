@@ -19,7 +19,7 @@ A purchase order (PO) carries a contractual delivery date. When a carrier or sup
 3. Checks reject anything the notice does not support, so an invented PO or date never reaches the planner.
 4. A rules engine recalculates stock cover and the shortage, then generates and ranks recovery options: micro-PO, stock transfer, change of destination, air freight. Each has cost, arrival date and CO2e.
 5. Gemini explains the trade-off and drafts the supplier message in the supplier's language.
-6. The planner approves. The approval is saved in Firestore and moves through approved, submitted and confirmed.
+6. The planner approves. The approval is saved in Firestore and moves through approved, submitted and confirmed. The approved option counts as new supply for that PO: if it arrives before stock ends and covers the shortage, the PO leaves the at-risk counts, and a redirect shrinks the donor shipment.
 
 For scale, the dashboard summarizes 500 delays by cause for each planner queue. A planner can also ask questions such as "Which POs risk a stockout in 14 days?", and Gemini answers by calling tools on the live data.
 

@@ -13,7 +13,7 @@ Limits: 20 Gemini calls a minute per client (`/v1/notices/extract`, `/v1/chat`) 
 | `POST /v1/sessions/:sid/reset` | Delete the session's changes. |
 | `POST /v1/chat` | Gemini chat with tools. Body: `sid`, `messages[]`. Returns `reply`, `toolCalls[]`, `poIds[]`. |
 | `POST /v1/assess` | Stockout assessment and ranked options for given stock, demand and candidates. |
-| `POST /v1/approvals` | Record a planner approval. Starts in state `approved`. |
+| `POST /v1/approvals` | Approve a recovery option for a PO. Body: `sid`, `poId`, `optionKind` (`micro_po`, `sto`, `cod`, `air`), `approvedBy`. The server works out the units and arrival day itself, refuses a second approval for the same PO, and starts in state `approved`. The approved option then counts as supply in `GET /v1/dataset` and in the chat tools. |
 | `GET /v1/approvals?sid=` | List a session's approvals. |
 | `POST /v1/approvals/:id/advance` | Move `approved` to `submitted`, then `confirmed`. Refuses to go further. |
 
