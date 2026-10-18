@@ -85,6 +85,10 @@ The full product has further tests for the rules engine, tools, approvals and da
 
 Chat answers took 20 to 28 seconds with Gemini's default thinking. With thinking turned off for chat, the same questions took 1.4 to 4 seconds.
 
+## Assumptions
+
+Costs, lead times and emission factors in the recovery options are illustrative assumptions, not plant data. So are the severity bands, the three-day "act today" cutoff and the monthly year-to-date figures. The ranking picks the cheapest option that arrives before stock ends and ignores supplier capacity, minimum order quantities and quality. A real deployment would replace these with plant data.
+
 ## What is in this repository
 
 - `gemini/` notice extraction, output checks, retry and timeout (runs standalone)
