@@ -209,7 +209,7 @@ details[open] .sumrow .car{transform:rotate(90deg)}
 </div>
 <div class="card mb" id="intake"><h2>Notice intake<span class="tagv">Live Gemini</span></h2>
 <div class="sub" id="ntfor" style="margin-bottom:8px"></div>
-<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" data-sample="0">English sample</button><button class="btn" data-sample="1">Bahasa sample</button><button class="btn" data-sample="2">Japanese sample</button></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px"><button class="btn" data-sample="0">English sample</button><button class="btn" data-sample="1">Bahasa Indonesia sample</button><button class="btn" data-sample="2">Japanese sample</button></div>
 <textarea id="nt" rows="4" placeholder="Paste a supplier or carrier delay notice, in any language"></textarea>
 <div style="margin-top:8px"><button class="btn v" id="nx">Extract with Gemini</button></div><div id="nr"></div></div>
 <div class="card mb"><h2>Needs action today</h2><div id="acts"></div></div>
@@ -538,7 +538,7 @@ function ask(q){
   cm().scrollTop=cm().scrollHeight;
  }).catch(function(e){CHAT.pop();w.innerHTML='<span style="color:var(--red)">'+e.message+'</span>';cm().scrollTop=cm().scrollHeight});
 }
-var SG=['Which POs risk a stockout in 14 days?','What causes the most delays?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa'];
+var SG=['Which POs risk a stockout in 14 days?','What causes the most delays?','What is our on-time delivery?','Summarize Rina\'s queue','Draft a supplier message in Bahasa Indonesia'];
 function openChat(on){chatOn=on;el('chat').classList.toggle('on',on);el('fab').style.display=on?'none':'flex';
  if(on&&!cm().children.length){addMsg('g','Hi, I am your planner copilot. I read the delay data above and can draft messages. What do you want to check?');
   el('sg').innerHTML=SG.map(function(x){return '<button>'+x+'</button>'}).join('');
